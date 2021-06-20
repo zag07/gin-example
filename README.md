@@ -6,40 +6,29 @@
 
 
 ```text
+├── assets
+│   ├── static
+│   └── template
 ├── cmd
-│   └── ...
-│
 ├── configs
-│   └── ...
-│
 ├── docs
-│   └── ...
-│
 ├── internal
 │   ├── app
 │   │   ├── controllers
 │   │   ├── models
 │   │   ├── services
-│   │   ├── tools
-│   │   └── ...
-│   ├── pkg
-│   │   ├── errcode
-│   │   └── ...
-│   ├── routes
-│   │   ├── middleware
-│   │   ├── api.go
 │   │   ├── ...
-│   │   └── router.go
-│   └── ...
-│
+│   │   └── tools
+│   ├── pkg
+│   └── routes
+│       ├── middleware
+│       ├── ...
+│       └── router.go
 ├── pkg
-│   └── ...
-│
 ├── storage
-│   ├── app
-│   └── logs
-│       
+│   └── logs 
 ├── main.go
 ├── go.mod
 ├── go.sum
+├── ...
 ```
