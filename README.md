@@ -11,6 +11,7 @@
 │   └── template
 ├── cmd
 ├── configs
+├── init
 ├── docs
 ├── internal
 │   ├── app
@@ -20,10 +21,12 @@
 │   │   ├── ...
 │   │   └── tools
 │   ├── pkg
+│   │   ├── config
+│   │   ├── database
+│   │   └── routing
 │   └── routes
 │       ├── middleware
-│       ├── ...
-│       └── router.go
+│       └── api.go
 ├── pkg
 ├── storage
 │   └── logs 
