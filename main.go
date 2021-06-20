@@ -1,11 +1,17 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/zs368/gin-example/internal/routes"
+)
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "pong"})
-	})
-	r.Run()
+	r := routes.NewRouter()
+	s := &http.Server{
+		Addr:    ":8080",
+		Handler: r,
+	}
+
+	s.ListenAndServe()
 }
