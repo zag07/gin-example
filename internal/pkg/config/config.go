@@ -15,6 +15,7 @@ func init() {
 	}
 }
 
+// TODO config 文件中的 k 未设置怎么办？
 func GetConfig(k string, v interface{}) error {
 	err := vp.UnmarshalKey(k, v)
 	if err != nil {

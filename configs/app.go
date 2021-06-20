@@ -10,3 +10,12 @@ type app struct {
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 }
+
+func (a app) Default() app {
+	return app{
+		RunMode:      "debug",
+		HttpPort:     "8080",
+		ReadTimeout:  60,
+		WriteTimeout: 60,
+	}
+}
