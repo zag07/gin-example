@@ -2,18 +2,21 @@ package database
 
 import (
 	"fmt"
+
+	"github.com/zs368/gin-example/configs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func NewDB() (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=%t&loc=%s",
-		"root",
-		"root",
-		"127.0.0.1:33061",
-		"gin_example",
-		true,
-		"Local")
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t&loc=%s",
+		configs.Db.MySQL.UserName,
+		configs.Db.MySQL.Password,
+		configs.Db.MySQL.Host,
+		configs.Db.MySQL.DBName,
+		configs.Db.MySQL.Charset,
+		configs.Db.MySQL.ParseTime,
+		configs.Db.MySQL.Loc)
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,   // DSN data source name
 		DefaultStringSize:         256,   // string 类型字段的默认长度
