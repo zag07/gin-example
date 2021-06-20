@@ -5,7 +5,7 @@ import (
 	"github.com/zs368/gin-example/internal/app/controllers"
 )
 
-func setApiRouter(r *gin.Engine) {
+func SetApiRouter(r *gin.Engine) {
 	apiV1 := r.Group("/api/v1")
 	{
 		user := controllers.NewUser()

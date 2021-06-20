@@ -1,20 +1,12 @@
-package models
+package database
 
 import (
 	"fmt"
-	"time"
-	
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-type Model struct {
-	ID        uint `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-func NewDBEngine() (*gorm.DB, error) {
+func NewDB() (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=%t&loc=%s",
 		"root",
 		"root",
