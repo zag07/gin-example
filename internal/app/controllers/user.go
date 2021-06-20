@@ -1,8 +1,10 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/zs368/gin-example/internal/app/models"
 )
 
 type User struct {
@@ -17,11 +19,20 @@ type UserGet struct {
 }
 
 func (u User) Get(c *gin.Context) {
-	var validate UserGet
-	if err := c.ShouldBindUri(&validate); err != nil {
+	var userGet UserGet
+	if err := c.ShouldBindUri(&userGet); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, "aaa")
+	db, err := models.NewDBEngine()
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	var user []models.User
+	db.Where("id = ?", userGet.ID).Find(&user)
+
+	c.JSON(200, user)
 }
