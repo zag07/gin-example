@@ -11,7 +11,7 @@ import (
 func main() {
 	r := routing.NewRouter()
 	s := &http.Server{
-		Addr:    ":" + configs.App.HttpPort,
+		Addr:    ":" + configs.Server.HttpPort,
 		Handler: r,
 	}
 
