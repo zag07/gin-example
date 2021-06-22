@@ -48,12 +48,3 @@ func GetUint(path string, defaultValue interface{}) uint {
 func GetBool(path string, defaultValue interface{}) bool {
 	return cast.ToBool(Get(path, defaultValue))
 }
-
-func GetConfig(k string, v interface{}) error {
-	err := vp.UnmarshalKey(k, v)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
