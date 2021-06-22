@@ -20,7 +20,7 @@ func init() {
 	}
 }
 
-func Get(key string, defaultValue interface{}) interface{} {
+func get(key string, defaultValue interface{}) interface{} {
 	if vp.IsSet(key) && vp.Get(key) != "" {
 		return vp.Get(key)
 	}
@@ -29,22 +29,22 @@ func Get(key string, defaultValue interface{}) interface{} {
 	return defaultValue
 }
 
-func GetString(path string, defaultValue interface{}) string {
-	return cast.ToString(Get(path, defaultValue))
+func GetString(path string, defaultValue string) string {
+	return cast.ToString(get(path, defaultValue))
 }
 
-func GetInt(path string, defaultValue interface{}) int {
-	return cast.ToInt(Get(path, defaultValue))
+func GetInt(path string, defaultValue int) int {
+	return cast.ToInt(get(path, defaultValue))
 }
 
-func GetInt64(path string, defaultValue interface{}) int64 {
-	return cast.ToInt64(Get(path, defaultValue))
+func GetInt64(path string, defaultValue int64) int64 {
+	return cast.ToInt64(get(path, defaultValue))
 }
 
-func GetUint(path string, defaultValue interface{}) uint {
-	return cast.ToUint(Get(path, defaultValue))
+func GetUint(path string, defaultValue uint) uint {
+	return cast.ToUint(get(path, defaultValue))
 }
 
-func GetBool(path string, defaultValue interface{}) bool {
-	return cast.ToBool(Get(path, defaultValue))
+func GetBool(path string, defaultValue bool) bool {
+	return cast.ToBool(get(path, defaultValue))
 }
