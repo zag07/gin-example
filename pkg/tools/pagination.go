@@ -2,11 +2,12 @@ package tools
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 	"github.com/zs368/gin-example/configs"
 )
 
 func GetPage(ctx *gin.Context) int {
-	page := StrTo(ctx.Query("page")).MustInt()
+	page := cast.ToInt(ctx.Query("page"))
 	if page <= 0 {
 		return 1
 	}
@@ -15,7 +16,7 @@ func GetPage(ctx *gin.Context) int {
 }
 
 func GetPageSize(ctx *gin.Context) int {
-	pageSize := StrTo(ctx.Query("limit")).MustInt()
+	pageSize := cast.ToInt(ctx.Query("limit"))
 	if pageSize <= 0 {
 		return configs.App.DefaultPageSize
 	}
