@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
 )
@@ -18,6 +19,13 @@ func init() {
 	if err := vp.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("Fatal error config file: %w \n", err))
 	}
+
+	go func() {
+		vp.WatchConfig()
+		vp.OnConfigChange(func(in fsnotify.Event) {
+			// TODO
+		})
+	}()
 }
 
 func get(key string, defaultValue interface{}) interface{} {
