@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zs368/gin-example/init"
 	"github.com/zs368/gin-example/internal/app/models"
+	"github.com/zs368/gin-example/internal/pkg/database"
 )
 
 type User struct {
@@ -27,7 +27,8 @@ func (u User) Get(c *gin.Context) {
 	}
 
 	var user []models.User
-	init.Db.Where("id = ?", userGet.ID).Find(&user)
+
+	database.DB.Where("id = ?", userGet.ID).Find(&user)
 
 	c.JSON(200, user)
 }

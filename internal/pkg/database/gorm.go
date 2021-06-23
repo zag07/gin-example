@@ -8,11 +8,20 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
+func init() {
+	var err error
+	if DB, err = NewDB(); err != nil {
+		panic("数据库连接错误")
+	}
+}
+
 func NewDB() (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t&loc=%s",
 		configs.Db.MySQL.UserName,
 		configs.Db.MySQL.Password,
-		configs.Db.MySQL.Host + ":" + configs.Db.MySQL.Port,
+		configs.Db.MySQL.Host+":"+configs.Db.MySQL.Port,
 		configs.Db.MySQL.DBName,
 		configs.Db.MySQL.Charset,
 		configs.Db.MySQL.ParseTime,
