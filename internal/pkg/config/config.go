@@ -1,58 +1,77 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
 )
 
-var vp *viper.Viper
+type Config struct {
+	vp *viper.Viper
+}
 
-func init() {
-	vp = viper.New()
-	vp.SetConfigName(".env")
-	vp.SetConfigType("env")
+func NewConfig(configName string) (*Config, error) {
+	vp := viper.New()
+	vp.SetConfigName(configName)
+	vp.SetConfigType("dotenv")
 	vp.AddConfigPath(".")
 
 	if err := vp.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("Fatal error config file: %w \n", err))
+		return nil, err
 	}
 
+	c := &Config{vp}
 	go func() {
 		vp.WatchConfig()
-		vp.OnConfigChange(func(in fsnotify.Event) {
-			// TODO
+		vp.OnConfigChange(func(e fsnotify.Event) {
+			c.ResetConfig()
 		})
 	}()
+
+	return c, nil
 }
 
-func get(key string, defaultValue interface{}) interface{} {
-	if vp.IsSet(key) && vp.Get(key) != "" {
-		return vp.Get(key)
+var sections = make(map[string]func(config *Config))
+
+func (c *Config) SetConfig(k string, f func(config *Config)) {
+	f(c)
+
+	if _, ok := sections[k]; !ok {
+		sections[k] = f
 	}
-	vp.SetDefault(key, defaultValue)
+}
+
+func (c *Config) ResetConfig() {
+	for _, f := range sections {
+		f(c)
+	}
+}
+
+func (c *Config) get(key string, defaultValue interface{}) interface{} {
+	if c.vp.IsSet(key) && c.vp.Get(key) != "" {
+		return c.vp.Get(key)
+	}
+	c.vp.SetDefault(key, defaultValue)
 
 	return defaultValue
 }
 
-func GetString(path string, defaultValue string) string {
-	return cast.ToString(get(path, defaultValue))
+func (c *Config) GetString(path string, defaultValue string) string {
+	return cast.ToString(c.get(path, defaultValue))
 }
 
-func GetInt(path string, defaultValue int) int {
-	return cast.ToInt(get(path, defaultValue))
+func (c *Config) GetInt(path string, defaultValue int) int {
+	return cast.ToInt(c.get(path, defaultValue))
 }
 
-func GetInt64(path string, defaultValue int64) int64 {
-	return cast.ToInt64(get(path, defaultValue))
+func (c *Config) GetInt64(path string, defaultValue int64) int64 {
+	return cast.ToInt64(c.get(path, defaultValue))
 }
 
-func GetUint(path string, defaultValue uint) uint {
-	return cast.ToUint(get(path, defaultValue))
+func (c *Config) GetUint(path string, defaultValue uint) uint {
+	return cast.ToUint(c.get(path, defaultValue))
 }
 
-func GetBool(path string, defaultValue bool) bool {
-	return cast.ToBool(get(path, defaultValue))
+func (c *Config) GetBool(path string, defaultValue bool) bool {
+	return cast.ToBool(c.get(path, defaultValue))
 }

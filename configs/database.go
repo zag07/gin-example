@@ -16,24 +16,20 @@ type mysql struct {
 	DBName       string
 	TablePrefix  string
 	Charset      string
-	ParseTime    bool
-	Loc          string
 	MaxIdleConns int
 	MaxOpenConns int
 }
 
-func init() {
-	Db.MySQL.Host = config.GetString("MYSQL_HOST", "127.0.0.1")
+func SetDbConfig(c *config.Config) {
+	Db.MySQL.Host = c.GetString("MYSQL_HOST", "127.0.0.1")
 
-	Db.MySQL.Port = config.GetString("MYSQL_PORT", "33061")
+	Db.MySQL.Port = c.GetString("MYSQL_PORT", "33061")
 
-	Db.MySQL.UserName = config.GetString("MYSQL_USERNAME", "root")
+	Db.MySQL.UserName = c.GetString("MYSQL_USERNAME", "root")
 
-	Db.MySQL.Password = config.GetString("MYSQL_PASSWORD", "root")
+	Db.MySQL.Password = c.GetString("MYSQL_PASSWORD", "root")
 
-	Db.MySQL.DBName = config.GetString("MYSQL_DATABASE", "gin_example")
+	Db.MySQL.DBName = c.GetString("MYSQL_DATABASE", "gin_example")
 
-	Db.MySQL.Charset = config.GetString("MYSQL_CHARSET", "utf8mb4")
-
-	Db.MySQL.ParseTime = config.GetBool("MYSQL_PARSE_TIME", true)
+	Db.MySQL.Charset = c.GetString("MYSQL_CHARSET", "utf8mb4")
 }

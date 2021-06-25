@@ -24,8 +24,8 @@ func NewDB() (*gorm.DB, error) {
 		configs.Db.MySQL.Host+":"+configs.Db.MySQL.Port,
 		configs.Db.MySQL.DBName,
 		configs.Db.MySQL.Charset,
-		configs.Db.MySQL.ParseTime,
-		configs.Db.MySQL.Loc)
+		true,
+		"Local")
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,   // DSN data source name
 		DefaultStringSize:         256,   // string 类型字段的默认长度
