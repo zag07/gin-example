@@ -1,34 +1,33 @@
 package controllers
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/zs368/gin-example/internal/app/controllers/core"
 	"github.com/zs368/gin-example/internal/app/models"
 	"github.com/zs368/gin-example/internal/pkg/database"
+	"github.com/zs368/gin-example/pkg/errcode"
 )
 
-type User struct {
-}
+type User struct{}
 
 func NewUser() User {
 	return User{}
 }
 
-type UserGet struct {
-	ID string `uri:"id" binding:"required,numeric"`
-}
-
 func (u User) Get(c *gin.Context) {
-	var userGet UserGet
-	if err := c.ShouldBindUri(&userGet); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	params := struct {
+		ID string `uri:"id" binding:"required,numeric"`
+	}{}
+
+	r := core.NewResponse(c)
+	if err := c.ShouldBindUri(&params); err != nil {
+		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}
 
 	var user []models.User
 
-	database.DB.Where("id = ?", userGet.ID).Find(&user)
+	database.DB.Where("id = ?", params.ID).Find(&user)
 
-	c.JSON(200, user)
+	r.ToResponse(user)
 }

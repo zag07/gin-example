@@ -10,5 +10,9 @@ func SetApiRouter(r *gin.Engine) {
 	{
 		user := controllers.NewUser()
 		apiV1.GET("/user/:id", user.Get)
+
+		article := controllers.NewArticle()
+		apiV1.GET("/article/:id", article.Get)
+		apiV1.POST("/article", article.Create)
 	}
 }

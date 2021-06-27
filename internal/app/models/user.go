@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type User struct {
 	ID              uint   `gorm:"primaryKey"`
 	Name            string `json:"name"`
@@ -9,8 +7,8 @@ type User struct {
 	EmailVerifiedAt string `json:"email_verified_at"`
 	Password        string `json:"password"`
 	RememberToken   uint8  `json:"remember_token"`
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
+	CreatedAt       uint32 `json:"created_at"`
+	UpdatedAt       string `json:"updated_at"`
 }
 
 func (User) TableName() string {
