@@ -15,7 +15,6 @@ func NewConfig(configName string) (*Config, error) {
 	vp.SetConfigName(configName)
 	vp.SetConfigType("dotenv")
 	vp.AddConfigPath(".")
-
 	if err := vp.ReadInConfig(); err != nil {
 		return nil, err
 	}
