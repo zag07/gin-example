@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/zs368/gin-example/internal/app/controllers/core"
 	"github.com/zs368/gin-example/internal/app/models"
-	"github.com/zs368/gin-example/internal/pkg/database"
-	"github.com/zs368/gin-example/pkg/errcode"
+	"github.com/zs368/gin-example/internal/pkg/errcode"
+	"github.com/zs368/gin-example/pkg/database"
 )
 
 type Article struct{}
@@ -41,7 +42,7 @@ func (a Article) Create(c *gin.Context) {
 	r := core.NewResponse(c)
 	var err error
 
-	if err = c.ShouldBindUri(&params); err != nil {
+	if err = c.ShouldBindBodyWith(&params, binding.JSON); err != nil {
 		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}

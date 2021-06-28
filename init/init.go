@@ -4,9 +4,9 @@ import (
 	"log"
 
 	"github.com/zs368/gin-example/configs"
-	"github.com/zs368/gin-example/internal/pkg/config"
-	"github.com/zs368/gin-example/internal/pkg/database"
-	"github.com/zs368/gin-example/internal/pkg/logger"
+	"github.com/zs368/gin-example/pkg/config"
+	"github.com/zs368/gin-example/pkg/database"
+	"github.com/zs368/gin-example/pkg/logger"
 )
 
 func init() {

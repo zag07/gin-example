@@ -1,6 +1,6 @@
 package configs
 
-import "github.com/zs368/gin-example/internal/pkg/config"
+import "github.com/zs368/gin-example/pkg/config"
 
 var App app
 

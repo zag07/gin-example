@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zs368/gin-example/pkg/errcode"
-	"github.com/zs368/gin-example/pkg/tools"
+	"github.com/zs368/gin-example/internal/pkg/errcode"
+	"github.com/zs368/gin-example/internal/pkg/tools"
 )
 
 type Response struct {

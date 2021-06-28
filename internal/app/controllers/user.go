@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/zs368/gin-example/internal/app/controllers/core"
 	"github.com/zs368/gin-example/internal/app/models"
-	"github.com/zs368/gin-example/internal/pkg/database"
-	"github.com/zs368/gin-example/pkg/errcode"
+	"github.com/zs368/gin-example/internal/pkg/errcode"
+	"github.com/zs368/gin-example/pkg/database"
 )
 
 type User struct{}
