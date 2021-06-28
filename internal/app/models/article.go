@@ -3,7 +3,7 @@ package models
 import "gorm.io/gorm"
 
 type Article struct {
-	ID            uint   `gorm:"primaryKey"`
+	ID            uint32   `gorm:"primaryKey"`
 	Title         string `json:"title"`
 	Desc          string `json:"desc"`
 	CoverImageUrl string `json:"cover_image_url"`
@@ -11,8 +11,8 @@ type Article struct {
 	State         uint8  `json:"state"`
 	CreatedAt     uint32 `json:"created_at"`
 	CreatedBy     string `json:"created_by"`
-	UpdatedAt     string `json:"updated_at"`
-	UpdatedBy     uint32 `json:"updated_by"`
+	UpdatedAt     uint32 `json:"updated_at"`
+	UpdatedBy     string `json:"updated_by"`
 }
 
 func (Article) TableName() string {
@@ -25,4 +25,12 @@ func (a Article) Create(db *gorm.DB) (*Article, error) {
 	}
 
 	return &a, nil
+}
+
+func (a Article) Update(db *gorm.DB, values interface{}) error {
+	if err := db.Model(&a).Where("id = ? AND is_del = ?", a.ID, 0).Updates(values).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
