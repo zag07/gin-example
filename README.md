@@ -16,18 +16,21 @@
 ├── internal
 │   ├── app
 │   │   ├── controllers
+│   │   ├── middleware
 │   │   ├── models
+│   │   ├── rules
 │   │   ├── services
+│   │   └── ...
+│   ├── pkg
 │   │   ├── ...
 │   │   └── tools
-│   ├── pkg
-│   │   ├── config
-│   │   ├── database
-│   │   └── routing
 │   └── routes
-│       ├── middleware
 │       └── api.go
 ├── pkg
+│   ├── config
+│   ├── database
+│   ├── logger
+│   └── routing 
 ├── storage
 │   └── logs 
 ├── main.go
