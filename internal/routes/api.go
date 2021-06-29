@@ -14,5 +14,13 @@ func SetApiRouter(r *gin.Engine) {
 		article := controllers.NewArticle()
 		apiV1.GET("/article/:id", article.Get)
 		apiV1.POST("/article", article.Create)
+		apiV1.PUT("/article/:id", article.Update)
+		apiV1.DELETE("/article/:id", article.Delete)
+
+		tag := controllers.NewTag()
+		apiV1.GET("/tag/:id", tag.Get)
+		apiV1.POST("/tag", tag.Create)
+		apiV1.PUT("/tag/:id", tag.Update)
+		apiV1.DELETE("/tag/:id", tag.Delete)
 	}
 }

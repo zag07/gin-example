@@ -1,13 +1,13 @@
 package models
 
+import "gorm.io/gorm"
+
 type Tag struct {
-	ID        uint   `gorm:"primaryKey"`
+	gorm.Model
 	Name      string `json:"name"`
 	State     uint8  `json:"state"`
-	CreatedAt uint32 `json:"created_at"`
 	CreatedBy string `json:"created_by"`
-	UpdatedAt string `json:"updated_at"`
-	UpdatedBy uint32 `json:"updated_by"`
+	UpdatedBy string `json:"updated_by"`
 }
 
 func (Tag) TableName() string {

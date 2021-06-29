@@ -17,18 +17,28 @@ func NewArticle() Article {
 
 func (a Article) Get(c *gin.Context) {
 	params := struct {
-		ID string `uri:"id" binding:"required,numeric"`
+		ID uint32 `uri:"id" binding:"required,numeric"`
 	}{}
 
-	r := core.NewResponse(c)
-	var err error
-
+	var (
+		r   = core.NewResponse(c)
+		err error
+	)
 	if err = c.ShouldBindUri(&params); err != nil {
 		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}
 
-	r.ToResponse("article get ok!!!")
+	var (
+		db      = database.DB
+		article models.Article
+	)
+	if err = db.Where("id = ?", params.ID).First(&article).Error; err != nil {
+		r.ToErrorResponse(errcode.ArticleGetFail)
+		return
+	}
+
+	r.ToResponse(article)
 }
 
 func (a Article) Create(c *gin.Context) {
@@ -41,23 +51,27 @@ func (a Article) Create(c *gin.Context) {
 		State         uint8  `json:"state" binding:"oneof=0 1"`
 	}{}
 
-	r := core.NewResponse(c)
-	var err error
-
+	var (
+		r   = core.NewResponse(c)
+		err error
+	)
 	if err = c.ShouldBindBodyWith(&params, binding.JSON); err != nil {
 		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}
 
-	article, err := models.Article{
-		Title:         params.Title,
-		Desc:          params.Desc,
-		CoverImageUrl: params.CoverImageUrl,
-		Content:       params.Content,
-		State:         params.State,
-		CreatedBy:     params.CreatedBy,
-	}.Create(database.DB)
-	if err != nil {
+	var (
+		db      = database.DB
+		article = models.Article{
+			Title:         params.Title,
+			Desc:          params.Desc,
+			CoverImageUrl: params.CoverImageUrl,
+			Content:       params.Content,
+			State:         params.State,
+			CreatedBy:     params.CreatedBy,
+		}
+	)
+	if err = db.Create(&article).Error; err != nil {
 		r.ToErrorResponse(errcode.ArticleCreateFail)
 		return
 	}
@@ -67,32 +81,33 @@ func (a Article) Create(c *gin.Context) {
 
 func (a Article) Update(c *gin.Context) {
 	params := struct {
-		ID            uint32 `json:"id" binding:"required,gte=1"`
+		ID            uint   `json:"id" binding:"required,gte=1"`
 		Title         string `json:"title" binding:"min=2,max=100"`
 		Desc          string `json:"desc" binding:"min=2,max=255"`
 		Content       string `json:"content" binding:"min=2,max=4294967295"`
 		CoverImageUrl string `json:"cover_image_url" binding:"omitempty,url"`
-		ModifiedBy    string `json:"modified_by" binding:"required,min=2,max=100"`
 		State         uint8  `json:"state" binding:"oneof=0 1"`
+		UpdatedBy     string `json:"updated_by" binding:"required,min=2,max=100"`
 	}{}
 
-	r := core.NewResponse(c)
-	var err error
-
+	var (
+		r   = core.NewResponse(c)
+		err error
+	)
 	if err = c.ShouldBindBodyWith(&params, binding.JSON); err != nil {
 		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}
 
-	err = models.Article{ID: params.ID}.Update(database.DB, map[string]interface{}{
-		"Title":         params.Title,
-		"Desc":          params.Desc,
-		"Content":       params.Content,
-		"CoverImageUrl": params.CoverImageUrl,
-		"ModifiedBy":    params.ModifiedBy,
-		"State":         params.State,
-	})
-	if err != nil {
+	db := database.DB
+	if err = db.Model(models.Article{}).Where("id = ?", params.ID).Updates(models.Article{
+		Title:         params.Title,
+		Desc:          params.Desc,
+		Content:       params.Content,
+		CoverImageUrl: params.CoverImageUrl,
+		State:         params.State,
+		UpdatedBy:     params.UpdatedBy,
+	}).Error; err != nil {
 		r.ToErrorResponse(errcode.ArticleUpdateFail)
 		return
 	}
@@ -105,17 +120,17 @@ func (a Article) Delete(c *gin.Context) {
 		ID uint32 `json:"id" binding:"required,gte=1"`
 	}{}
 
-	r := core.NewResponse(c)
-	var err error
-
+	var (
+		r   = core.NewResponse(c)
+		err error
+	)
 	if err = c.ShouldBindBodyWith(&params, binding.JSON); err != nil {
 		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}
 
-	// 为什么不能放下 if 里面
-	err = models.Article{ID: params.ID}.Delete(database.DB)
-	if err != nil {
+	db := database.DB
+	if err = db.Delete(&models.Article{}, params.ID).Error; err != nil {
 		r.ToErrorResponse(errcode.ArticleDeleteFail)
 		return
 	}
