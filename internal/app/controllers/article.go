@@ -21,7 +21,9 @@ func (a Article) Get(c *gin.Context) {
 	}{}
 
 	r := core.NewResponse(c)
-	if err := c.ShouldBindUri(&params); err != nil {
+	var err error
+
+	if err = c.ShouldBindUri(&params); err != nil {
 		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}
@@ -55,6 +57,10 @@ func (a Article) Create(c *gin.Context) {
 		State:         params.State,
 		CreatedBy:     params.CreatedBy,
 	}.Create(database.DB)
+	if err != nil {
+		r.ToErrorResponse(errcode.ArticleCreateFail)
+		return
+	}
 
 	r.ToResponse(article)
 }
@@ -62,7 +68,6 @@ func (a Article) Create(c *gin.Context) {
 func (a Article) Update(c *gin.Context) {
 	params := struct {
 		ID            uint32 `json:"id" binding:"required,gte=1"`
-		TagID         uint32 `json:"tag_id" binding:"required,gte=1"`
 		Title         string `json:"title" binding:"min=2,max=100"`
 		Desc          string `json:"desc" binding:"min=2,max=255"`
 		Content       string `json:"content" binding:"min=2,max=4294967295"`
@@ -80,16 +85,40 @@ func (a Article) Update(c *gin.Context) {
 	}
 
 	err = models.Article{ID: params.ID}.Update(database.DB, map[string]interface{}{
-		"state": params.State,
+		"Title":         params.Title,
+		"Desc":          params.Desc,
+		"Content":       params.Content,
+		"CoverImageUrl": params.CoverImageUrl,
+		"ModifiedBy":    params.ModifiedBy,
+		"State":         params.State,
 	})
-
 	if err != nil {
 		r.ToErrorResponse(errcode.ArticleUpdateFail)
+		return
 	}
 
-	r.ToResponse("更新成功")
+	r.ToResponse("文章更新成功")
 }
 
 func (a Article) Delete(c *gin.Context) {
+	params := struct {
+		ID uint32 `json:"id" binding:"required,gte=1"`
+	}{}
 
+	r := core.NewResponse(c)
+	var err error
+
+	if err = c.ShouldBindBodyWith(&params, binding.JSON); err != nil {
+		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
+		return
+	}
+
+	// 为什么不能放下 if 里面
+	err = models.Article{ID: params.ID}.Delete(database.DB)
+	if err != nil {
+		r.ToErrorResponse(errcode.ArticleDeleteFail)
+		return
+	}
+
+	r.ToResponse("文章删除成功")
 }
