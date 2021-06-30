@@ -1,0 +1,344 @@
+definitions:
+  errcode.Error:
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Article:
+    properties:
+      content:
+        type: string
+      cover_image_url:
+        type: string
+      created_by:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      desc:
+        type: string
+      id:
+        type: integer
+      state:
+        type: integer
+      title:
+        type: string
+      updated_by:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.Tag:
+    properties:
+      created_by:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      state:
+        type: integer
+      updated_by:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: gin-example
+  version: 0.0.1
+paths:
+  /api/v1/article:
+    post:
+      parameters:
+      - description: 标签ID
+        in: body
+        name: tag_id
+        required: true
+        schema:
+          type: string
+      - description: 文章标题
+        in: body
+        name: title
+        required: true
+        schema:
+          type: string
+      - description: 文章简述
+        in: body
+        name: desc
+        schema:
+          type: string
+      - description: 封面图片地址
+        in: body
+        name: cover_image_url
+        required: true
+        schema:
+          type: string
+      - description: 文章内容
+        in: body
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: 创建者
+        in: body
+        name: created_by
+        required: true
+        schema:
+          type: integer
+      - description: 状态
+        in: body
+        name: state
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/models.Article'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+  /api/v1/article/{id}:
+    delete:
+      parameters:
+      - description: 文章ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: string
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+    get:
+      parameters:
+      - description: 文章 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/models.Article'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+    put:
+      parameters:
+      - description: 标签ID
+        in: body
+        name: tag_id
+        schema:
+          type: string
+      - description: 文章标题
+        in: body
+        name: title
+        schema:
+          type: string
+      - description: 文章简述
+        in: body
+        name: desc
+        schema:
+          type: string
+      - description: 封面图片地址
+        in: body
+        name: cover_image_url
+        schema:
+          type: string
+      - description: 文章内容
+        in: body
+        name: content
+        schema:
+          type: string
+      - description: 修改者
+        in: body
+        name: modified_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            type: string
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+  /api/v1/tag:
+    post:
+      parameters:
+      - description: 标签名称
+        in: body
+        maxLength: 100
+        minLength: 2
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: 状态
+        enum:
+        - 0
+        - 1
+        in: body
+        name: state
+        schema:
+          type: integer
+      - description: 创建者
+        in: body
+        maxLength: 100
+        minLength: 3
+        name: created_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tag'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+  /api/v1/tag/{id}:
+    delete:
+      parameters:
+      - description: 标签 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 标签删除成功
+          schema:
+            type: string
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+    get:
+      parameters:
+      - description: 标签 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/models.Tag'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+    put:
+      parameters:
+      - description: 标签 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 标签名称
+        in: body
+        maxLength: 100
+        minLength: 2
+        name: name
+        schema:
+          type: string
+      - description: 状态
+        enum:
+        - 0
+        - 1
+        in: body
+        name: state
+        schema:
+          type: integer
+      - description: 修改者
+        in: body
+        maxLength: 100
+        minLength: 2
+        name: modified_by
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 标签更新成功
+          schema:
+            type: string
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+swagger: "2.0"

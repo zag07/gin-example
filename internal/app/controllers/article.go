@@ -16,6 +16,13 @@ func NewArticle() Article {
 	return Article{}
 }
 
+// Get @Summary 获取多个文章
+// @Produce  json
+// @Param id path int true "文章 ID"
+// @Success 200 {object} models.Article "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/v1/article/{id} [get]
 func (a Article) Get(c *gin.Context) {
 	params := struct {
 		ID uint `uri:"id" binding:"required,gte=1"`
@@ -42,6 +49,19 @@ func (a Article) Get(c *gin.Context) {
 	r.ToResponse(article)
 }
 
+// Create @Summary 创建文章
+// @Produce json
+// @Param tag_id body string true "标签ID"
+// @Param title body string true "文章标题"
+// @Param desc body string false "文章简述"
+// @Param cover_image_url body string true "封面图片地址"
+// @Param content body string true "文章内容"
+// @Param created_by body int true "创建者"
+// @Param state body int false "状态"
+// @Success 200 {object} models.Article "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/v1/article [post]
 func (a Article) Create(c *gin.Context) {
 	params := struct {
 		Title         string `json:"title" binding:"required,min=2,max=100"`
@@ -80,6 +100,18 @@ func (a Article) Create(c *gin.Context) {
 	r.ToResponse(article)
 }
 
+// Update @Summary 更新文章
+// @Produce json
+// @Param tag_id body string false "标签ID"
+// @Param title body string false "文章标题"
+// @Param desc body string false "文章简述"
+// @Param cover_image_url body string false "封面图片地址"
+// @Param content body string false "文章内容"
+// @Param modified_by body string true "修改者"
+// @Success 200 {string} string "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/v1/article/{id} [put]
 func (a Article) Update(c *gin.Context) {
 	params := struct {
 		ID            uint   `json:"id" binding:"required,gte=1"`
@@ -135,6 +167,13 @@ func (a Article) Update(c *gin.Context) {
 	r.ToResponse("文章更新成功")
 }
 
+// Delete @Summary 删除文章
+// @Produce  json
+// @Param id path int true "文章ID"
+// @Success 200 {string} string "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/v1/article/{id} [delete]
 func (a Article) Delete(c *gin.Context) {
 	params := struct {
 		ID uint `uri:"id" binding:"required,gte=1"`

@@ -8,6 +8,8 @@ import (
 	"github.com/zs368/gin-example/pkg/routing"
 )
 
+// @title gin-example
+// @version 0.0.1
 func main() {
 	r := routing.NewRouter()
 	s := &http.Server{
