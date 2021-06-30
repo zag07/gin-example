@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/spf13/cast"
 	"github.com/zs368/gin-example/internal/app/controllers/core"
 	"github.com/zs368/gin-example/internal/app/models"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
@@ -82,7 +83,9 @@ func (t Tag) Update(c *gin.Context) {
 		State     uint8  `json:"state" binding:"oneof=0 1"`
 		CreatedBy string `json:"created_by" binding:"required,min=2,max=100"`
 		UpdatedBy string `json:"updated_by" binding:"required,min=2,max=100"`
-	}{}
+	}{
+		ID: cast.ToUint(c.Param("id")),
+	}
 
 	var (
 		r   = core.NewResponse(c)

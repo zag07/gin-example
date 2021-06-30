@@ -19,15 +19,20 @@ func (u User) Get(c *gin.Context) {
 		ID string `uri:"id" binding:"required,numeric"`
 	}{}
 
-	r := core.NewResponse(c)
-	if err := c.ShouldBindUri(&params); err != nil {
+	var (
+		r   = core.NewResponse(c)
+		err error
+	)
+	if err = c.ShouldBindUri(&params); err != nil {
 		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
 		return
 	}
 
-	var user []models.User
-
-	database.DB.Where("id = ?", params.ID).Find(&user)
+	var (
+		db   = database.DB
+		user models.User
+	)
+	db.Where("id = ?", params.ID).First(&user)
 
 	r.ToResponse(user)
 }
