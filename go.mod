@@ -10,6 +10,7 @@ require (
 	github.com/spf13/cast v1.3.1
 	github.com/spf13/viper v1.8.0
 	github.com/stretchr/testify v1.7.0
+	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
 	gorm.io/driver/mysql v1.1.1
 	gorm.io/gorm v1.21.11
