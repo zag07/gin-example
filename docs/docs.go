@@ -26,19 +26,14 @@ var doc = `{
     "paths": {
         "/api/v1/article": {
             "post": {
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
+                "summary": "创建文章",
                 "parameters": [
-                    {
-                        "description": "标签ID",
-                        "name": "tag_id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
                     {
                         "description": "文章标题",
                         "name": "title",
@@ -52,6 +47,7 @@ var doc = `{
                         "description": "文章简述",
                         "name": "desc",
                         "in": "body",
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -60,7 +56,6 @@ var doc = `{
                         "description": "封面图片地址",
                         "name": "cover_image_url",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -84,9 +79,10 @@ var doc = `{
                         }
                     },
                     {
-                        "description": "状态",
-                        "name": "state",
+                        "description": "创建者",
+                        "name": "updated_by",
                         "in": "body",
+                        "required": true,
                         "schema": {
                             "type": "integer"
                         }
@@ -94,9 +90,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "文章创建成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Article"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -119,6 +115,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "summary": "获取单个文章",
                 "parameters": [
                     {
                         "type": "integer",
@@ -130,9 +127,12 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "获取文章成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Article"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/rules.ArticleGetResponse"
+                            }
                         }
                     },
                     "400": {
@@ -150,17 +150,20 @@ var doc = `{
                 }
             },
             "put": {
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
+                "summary": "更新文章",
                 "parameters": [
                     {
-                        "description": "标签ID",
-                        "name": "tag_id",
-                        "in": "body",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "integer",
+                        "description": "文章ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     },
                     {
                         "description": "文章标题",
@@ -206,7 +209,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "文章更新成功",
                         "schema": {
                             "type": "string"
                         }
@@ -229,6 +232,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "summary": "删除文章",
                 "parameters": [
                     {
                         "type": "integer",
@@ -240,7 +244,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "文章删除成功",
                         "schema": {
                             "type": "string"
                         }
@@ -262,9 +266,13 @@ var doc = `{
         },
         "/api/v1/tag": {
             "post": {
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
+                "summary": "新增标签",
                 "parameters": [
                     {
                         "maxLength": 100,
@@ -278,18 +286,6 @@ var doc = `{
                         }
                     },
                     {
-                        "enum": [
-                            0,
-                            1
-                        ],
-                        "description": "状态",
-                        "name": "state",
-                        "in": "body",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
                         "maxLength": 100,
                         "minLength": 3,
                         "description": "创建者",
@@ -299,13 +295,24 @@ var doc = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "maxLength": 100,
+                        "minLength": 3,
+                        "description": "更新者",
+                        "name": "updated_by",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "标签创建成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Tag"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -328,6 +335,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "summary": "获取单个标签",
                 "parameters": [
                     {
                         "type": "integer",
@@ -339,9 +347,12 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "获取标签成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Tag"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/rules.TagGetResponse"
+                            }
                         }
                     },
                     "400": {
@@ -359,9 +370,13 @@ var doc = `{
                 }
             },
             "put": {
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
+                "summary": "更新标签",
                 "parameters": [
                     {
                         "type": "integer",
@@ -429,6 +444,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "summary": "删除标签",
                 "parameters": [
                     {
                         "type": "integer",
@@ -465,19 +481,7 @@ var doc = `{
         "errcode.Error": {
             "type": "object"
         },
-        "gorm.DeletedAt": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
-        "models.Article": {
+        "rules.ArticleGetResponse": {
             "type": "object",
             "properties": {
                 "content": {
@@ -492,16 +496,10 @@ var doc = `{
                 "created_by": {
                     "type": "string"
                 },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
                 "desc": {
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
-                },
-                "state": {
                     "type": "integer"
                 },
                 "title": {
@@ -515,7 +513,7 @@ var doc = `{
                 }
             }
         },
-        "models.Tag": {
+        "rules.TagGetResponse": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -523,9 +521,6 @@ var doc = `{
                 },
                 "created_by": {
                     "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
                 },
                 "id": {
                     "type": "integer"

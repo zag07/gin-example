@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/spf13/cast"
-	"github.com/zs368/gin-example/internal/app/controllers/core"
 	"github.com/zs368/gin-example/internal/app/models"
+	"github.com/zs368/gin-example/internal/app/rules"
+	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
 	"github.com/zs368/gin-example/pkg/database"
 )
@@ -16,62 +16,58 @@ func NewTag() Tag {
 	return Tag{}
 }
 
-// Get @Summary 获取多个标签
+// Get godoc
+// @Summary 获取单个标签
 // @Produce  json
 // @Param id path int true "标签 ID"
-// @Success 200 {object} models.Tag "成功"
+// @Success 200 {array} rules.TagGetResponse "获取标签成功"
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tag/{id} [get]
 func (t Tag) Get(c *gin.Context) {
-	params := struct {
-		ID uint32 `uri:"id" binding:"required,numeric"`
-	}{}
-
 	var (
-		r   = core.NewResponse(c)
-		err error
+		r      = app.NewResponse(c)
+		params = rules.TagGetRequest{}
 	)
-	if err = c.ShouldBindUri(&params); err != nil {
-		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
+
+	if err := app.BindAndValid(c, &params); err != nil {
+		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Errors()...))
 		return
 	}
 
 	var (
 		db  = database.DB
 		tag models.Tag
+		res rules.TagGetResponse
 	)
-	if err = db.Where("id = ?", params.ID).First(&tag).Error; err != nil {
+
+	if err := db.Model(&tag).Where("id = ?", params.ID).First(&res).Error; err != nil {
 		r.ToErrorResponse(errcode.TagGetFail.WithDetails(err.Error()))
 		return
 	}
 
-	r.ToResponse(tag)
+	r.ToResponse(res)
 }
 
-// Create @Summary 新增标签
+// Create godoc
+// @Summary 新增标签
+// @Accept  json
 // @Produce  json
 // @Param name body string true "标签名称" minlength(2) maxlength(100)
-// @Param state body int false "状态" Enums(0, 1)
 // @Param created_by body string true "创建者" minlength(3) maxlength(100)
-// @Success 200 {object} models.Tag
+// @Param updated_by body string true "更新者" minlength(3) maxlength(100)
+// @Success 200 {string} string "标签创建成功"
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tag [post]
 func (t Tag) Create(c *gin.Context) {
-	params := struct {
-		Name      string `json:"title" binding:"required,min=2,max=100"`
-		State     uint8  `json:"state" binding:"oneof=0 1"`
-		CreatedBy string `json:"created_by" binding:"required,min=2,max=100"`
-		UpdatedBy string `json:"updated_by" binding:"required,min=2,max=100"`
-	}{}
-
 	var (
-		r   = core.NewResponse(c)
-		err error
+		r      = app.NewResponse(c)
+		params = rules.TagCreateRequest{}
 	)
-	if err = c.ShouldBindBodyWith(&params, binding.JSON); err != nil {
-		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
+
+	if err := app.BindAndValid(c, &params); err != nil {
+		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Errors()...))
 		return
 	}
 
@@ -79,20 +75,22 @@ func (t Tag) Create(c *gin.Context) {
 		db  = database.DB
 		tag = models.Tag{
 			Name:      params.Name,
-			State:     params.State,
 			CreatedBy: params.CreatedBy,
 			UpdatedBy: params.UpdatedBy,
 		}
 	)
-	if err = db.Create(&tag).Error; err != nil {
+
+	if err := db.Create(&tag).Error; err != nil {
 		r.ToErrorResponse(errcode.TagCreateFail.WithDetails(err.Error()))
 		return
 	}
 
-	r.ToResponse(tag)
+	r.ToResponse("标签创建成功")
 }
 
-// Update @Summary 更新标签
+// Update godoc
+// @Summary 更新标签
+// @Accept  json
 // @Produce  json
 // @Param id path int true "标签 ID"
 // @Param name body string false "标签名称" minlength(2) maxlength(100)
@@ -103,29 +101,23 @@ func (t Tag) Create(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tag/{id} [put]
 func (t Tag) Update(c *gin.Context) {
-	params := struct {
-		ID        uint   `json:"id" binding:"required,gte=1"`
-		Name      string `json:"title" binding:"required,min=2,max=100"`
-		State     uint8  `json:"state" binding:"oneof=0 1"`
-		CreatedBy string `json:"created_by" binding:"required,min=2,max=100"`
-		UpdatedBy string `json:"updated_by" binding:"required,min=2,max=100"`
-	}{
-		ID: cast.ToUint(c.Param("id")),
-	}
-
 	var (
-		r   = core.NewResponse(c)
-		err error
+		r      = app.NewResponse(c)
+		params = rules.TagUpdateRequest{ID: cast.ToUint(c.Param("id"))}
 	)
-	if err = c.ShouldBindBodyWith(&params, binding.JSON); err != nil {
-		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
+
+	if err := app.BindAndValid(c, &params); err != nil {
+		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Errors()...))
 		return
 	}
 
-	db := database.DB
-	if err = db.Model(models.Tag{}).Where("id = ?", params.ID).Updates(models.Tag{
+	var (
+		db  = database.DB
+		tag models.Tag
+	)
+
+	if err := db.Model(&tag).Where("id = ?", params.ID).Updates(models.Tag{
 		Name:      params.Name,
-		State:     params.State,
 		CreatedBy: params.CreatedBy,
 		UpdatedBy: params.UpdatedBy,
 	}).Error; err != nil {
@@ -136,7 +128,8 @@ func (t Tag) Update(c *gin.Context) {
 	r.ToResponse("标签更新成功")
 }
 
-// Delete @Summary 删除标签
+// Delete
+// @Summary 删除标签
 // @Produce  json
 // @Param id path int true "标签 ID"
 // @Success 200 {string} string "标签删除成功"
@@ -144,21 +137,22 @@ func (t Tag) Update(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tag/{id} [delete]
 func (t Tag) Delete(c *gin.Context) {
-	params := struct {
-		ID uint32 `json:"id" binding:"required,gte=1"`
-	}{}
-
 	var (
-		r   = core.NewResponse(c)
-		err error
+		r      = app.NewResponse(c)
+		params = rules.TagDeleteRequest{}
 	)
-	if err = c.ShouldBindBodyWith(&params, binding.JSON); err != nil {
-		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Error()))
+
+	if err := app.BindAndValid(c, &params); err != nil {
+		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Errors()...))
 		return
 	}
 
-	db := database.DB
-	if err = db.Delete(&models.Tag{}, params.ID).Error; err != nil {
+	var (
+		db  = database.DB
+		tag models.Tag
+	)
+
+	if err := db.Delete(&tag, params.ID).Error; err != nil {
 		r.ToErrorResponse(errcode.TagDeleteFail.WithDetails(err.Error()))
 		return
 	}

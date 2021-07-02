@@ -1,4 +1,4 @@
-package tools
+package app
 
 import (
 	"github.com/gin-gonic/gin"
@@ -27,7 +27,11 @@ func GetPageSize(ctx *gin.Context) int {
 	return pageSize
 }
 
-// TODO 下面这种形式是错误的 0.0
-// func GetPageOffset(ctx *gin.Context, ...[]int) int {
-//
-// }
+func GetPageOffset(page, pageSize int) int {
+	pageOffset := 0
+	if page > 0 {
+		pageOffset = (page - 1) * pageSize
+	}
+
+	return pageOffset
+}

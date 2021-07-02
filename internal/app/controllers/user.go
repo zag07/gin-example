@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/zs368/gin-example/internal/app/controllers/core"
 	"github.com/zs368/gin-example/internal/app/models"
+	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
 	"github.com/zs368/gin-example/pkg/database"
 )
@@ -20,7 +20,7 @@ func (u User) Get(c *gin.Context) {
 	}{}
 
 	var (
-		r   = core.NewResponse(c)
+		r   = app.NewResponse(c)
 		err error
 	)
 	if err = c.ShouldBindUri(&params); err != nil {

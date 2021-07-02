@@ -1,11 +1,10 @@
-package core
+package app
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
-	"github.com/zs368/gin-example/internal/pkg/tools"
 )
 
 type Response struct {
@@ -33,8 +32,8 @@ func (r Response) ToResponseList(list interface{}, total int) {
 	r.Ctx.JSON(http.StatusOK, gin.H{
 		"list": list,
 		"paper": Pager{
-			Page:     tools.GetPage(r.Ctx),
-			PageSize: tools.GetPageSize(r.Ctx),
+			Page:     GetPage(r.Ctx),
+			PageSize: GetPageSize(r.Ctx),
 			Total:    total,
 		},
 	})
