@@ -1,6 +1,8 @@
 package config
 
 import (
+	"strings"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
@@ -57,6 +59,10 @@ func (c *Config) get(key string, defaultValue interface{}) interface{} {
 
 func (c *Config) GetString(path string, defaultValue string) string {
 	return cast.ToString(c.get(path, defaultValue))
+}
+
+func (c *Config) GetStringSlice(path string, defaultValue string) []string {
+	return strings.Split(cast.ToString(c.get(path, defaultValue)), ",")
 }
 
 func (c *Config) GetInt(path string, defaultValue int) int {

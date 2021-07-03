@@ -10,4 +10,6 @@ var (
 	TagCreateFail = NewError(20010103, "标签创建失败")
 	TagUpdateFail = NewError(20010104, "标签更新失败")
 	TagDeleteFail = NewError(20010105, "标签删除失败")
+
+	UploadFileFail = NewError(70000001, "文件上传失败")
 )

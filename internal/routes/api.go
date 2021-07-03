@@ -1,11 +1,22 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	"github.com/zs368/gin-example/configs"
 	"github.com/zs368/gin-example/internal/app/controllers"
+	"github.com/zs368/gin-example/internal/app/controllers/common_ctl"
 )
 
 func SetApiRouter(r *gin.Engine) {
+	c := r.Group("/c")
+	{
+		upload := common_ctl.NewUpload()
+		c.POST("/upload/file", upload.UploadFile)
+		c.StaticFS("/static", http.Dir(configs.App.UploadSavePath))
+	}
+
 	apiV1 := r.Group("/api/v1")
 	{
 		user := controllers.NewUser()

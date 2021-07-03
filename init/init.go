@@ -11,7 +11,7 @@ import (
 
 func init() {
 	if err := setConfig(); err != nil {
-		log.Fatalf("init.setConfig err: %v", err)
+		log.Println("init.setConfig err: %v, %v", err, "将使用默认值")
 	}
 
 	if err := setDatabase(); err != nil {

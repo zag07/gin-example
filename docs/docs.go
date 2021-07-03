@@ -475,9 +475,68 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/c/upload/file": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "文件上传",
+                "parameters": [
+                    {
+                        "description": "文件类型",
+                        "name": "type",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "文件",
+                        "name": "file",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "文件上传成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/common_rule.UploadFileResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/errcode.Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "common_rule.UploadFileResponse": {
+            "type": "object",
+            "properties": {
+                "file_url": {
+                    "type": "string"
+                }
+            }
+        },
         "errcode.Error": {
             "type": "object"
         },
