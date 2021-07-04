@@ -5,12 +5,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/zs368/gin-example/configs"
-	"github.com/zs368/gin-example/internal/app/controllers/auth_ctl"
 	"github.com/zs368/gin-example/internal/app/controllers/common_ctl"
 	"github.com/zs368/gin-example/internal/app/controllers/news_ctl"
+	"github.com/zs368/gin-example/internal/app/controllers/system_ctl"
+	"github.com/zs368/gin-example/internal/app/middleware"
 )
 
 func SetApiRouter(r *gin.Engine) {
+	auth := system_ctl.NewAuth()
+	r.POST("/login", auth.Login)
+
 	c := r.Group("/c")
 	{
 		upload := common_ctl.NewUpload()
@@ -18,11 +22,8 @@ func SetApiRouter(r *gin.Engine) {
 		c.StaticFS("/static", http.Dir(configs.App.UploadSavePath))
 	}
 
-	apiV1 := r.Group("/api/v1")
+	apiV1 := r.Group("/api/v1").Use(middleware.JWT())
 	{
-		user := auth_ctl.NewUser()
-		apiV1.GET("/user/:id", user.Get)
-
 		article := news_ctl.NewArticle()
 		apiV1.GET("/article/:id", article.Get)
 		apiV1.POST("/article", article.Create)
