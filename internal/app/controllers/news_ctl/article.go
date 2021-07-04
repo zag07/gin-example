@@ -1,10 +1,10 @@
-package controllers
+package news_ctl
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 	"github.com/zs368/gin-example/internal/app/models"
-	"github.com/zs368/gin-example/internal/app/rules"
+	"github.com/zs368/gin-example/internal/app/rules/news_rule"
 	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
 	"github.com/zs368/gin-example/pkg/database"
@@ -27,7 +27,7 @@ func NewArticle() Article {
 func (a Article) Get(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = rules.ArticleGetRequest{}
+		params = news_rule.ArticleGetRequest{}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -38,7 +38,7 @@ func (a Article) Get(c *gin.Context) {
 	var (
 		db      = database.DB
 		article models.Article
-		res     rules.ArticleGetResponse
+		res     news_rule.ArticleGetResponse
 	)
 
 	if err := db.Model(&article).Where("id = ?", params.ID).First(&res).Error; err != nil {
@@ -66,7 +66,7 @@ func (a Article) Get(c *gin.Context) {
 func (a Article) Create(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = rules.ArticleCreateRequest{}
+		params = news_rule.ArticleCreateRequest{}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -110,7 +110,7 @@ func (a Article) Create(c *gin.Context) {
 func (a Article) Update(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = rules.ArticleUpdateRequest{ID: cast.ToUint(c.Param("id"))}
+		params = news_rule.ArticleUpdateRequest{ID: cast.ToUint(c.Param("id"))}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -163,7 +163,7 @@ func (a Article) Update(c *gin.Context) {
 func (a Article) Delete(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = rules.ArticleDeleteRequest{}
+		params = news_rule.ArticleDeleteRequest{}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {

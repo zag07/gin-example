@@ -1,10 +1,10 @@
-package controllers
+package news_ctl
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 	"github.com/zs368/gin-example/internal/app/models"
-	"github.com/zs368/gin-example/internal/app/rules"
+	"github.com/zs368/gin-example/internal/app/rules/news_rule"
 	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
 	"github.com/zs368/gin-example/pkg/database"
@@ -27,7 +27,7 @@ func NewTag() Tag {
 func (t Tag) Get(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = rules.TagGetRequest{}
+		params = news_rule.TagGetRequest{}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -38,7 +38,7 @@ func (t Tag) Get(c *gin.Context) {
 	var (
 		db  = database.DB
 		tag models.Tag
-		res rules.TagGetResponse
+		res news_rule.TagGetResponse
 	)
 
 	if err := db.Model(&tag).Where("id = ?", params.ID).First(&res).Error; err != nil {
@@ -63,7 +63,7 @@ func (t Tag) Get(c *gin.Context) {
 func (t Tag) Create(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = rules.TagCreateRequest{}
+		params = news_rule.TagCreateRequest{}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -103,7 +103,7 @@ func (t Tag) Create(c *gin.Context) {
 func (t Tag) Update(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = rules.TagUpdateRequest{ID: cast.ToUint(c.Param("id"))}
+		params = news_rule.TagUpdateRequest{ID: cast.ToUint(c.Param("id"))}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -139,7 +139,7 @@ func (t Tag) Update(c *gin.Context) {
 func (t Tag) Delete(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = rules.TagDeleteRequest{}
+		params = news_rule.TagDeleteRequest{}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {

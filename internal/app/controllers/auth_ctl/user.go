@@ -1,4 +1,4 @@
-package controllers
+package auth_ctl
 
 import (
 	"github.com/gin-gonic/gin"
