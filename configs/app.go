@@ -1,17 +1,22 @@
 package configs
 
-import "github.com/zs368/gin-example/pkg/config"
+import (
+	"time"
+
+	"github.com/zs368/gin-example/pkg/config"
+)
 
 var App app
 
 type app struct {
-	Port                 string
-	DefaultPageSize      int
-	MaxPageSize          int
-	UploadSavePath       string
-	UploadServerUrl      string
-	UploadImageMaxSize   int
-	UploadImageAllowExts []string
+	Port                  string
+	DefaultPageSize       int
+	MaxPageSize           int
+	UploadSavePath        string
+	UploadServerUrl       string
+	UploadImageMaxSize    int
+	UploadImageAllowExts  []string
+	DefaultContextTimeout time.Duration
 }
 
 func SetAppConfig(c *config.Config) {
@@ -28,4 +33,6 @@ func SetAppConfig(c *config.Config) {
 	App.UploadImageMaxSize = c.GetInt("UploadImageMaxSize", 5)
 
 	App.UploadImageAllowExts = c.GetStringSlice("UploadImageAllowExts", ".jpg,.jpeg,.png")
+
+	App.DefaultContextTimeout = c.GetDuration("DefaultContextTimeout", 60)
 }

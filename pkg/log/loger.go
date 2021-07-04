@@ -1,4 +1,4 @@
-package logger
+package log
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var Log *logrus.Logger
+var Logger *logrus.Logger
 
 func NewLogger(name string) (*logrus.Logger, error) {
 	var log = logrus.New()

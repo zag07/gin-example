@@ -6,7 +6,7 @@ import (
 	"github.com/zs368/gin-example/configs"
 	"github.com/zs368/gin-example/pkg/config"
 	"github.com/zs368/gin-example/pkg/database"
-	"github.com/zs368/gin-example/pkg/logger"
+	zLog "github.com/zs368/gin-example/pkg/log"
 )
 
 func init() {
@@ -46,7 +46,7 @@ func setDatabase() error {
 
 func setLogger() error {
 	var err error
-	if logger.Log, err = logger.NewLogger("storage/logs/logrus.log"); err != nil {
+	if zLog.Logger, err = zLog.NewLogger("storage/logs/logrus.log"); err != nil {
 		return err
 	}
 

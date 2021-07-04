@@ -2,6 +2,7 @@ package config
 
 import (
 	"strings"
+	"time"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cast"
@@ -79,4 +80,8 @@ func (c *Config) GetUint(path string, defaultValue uint) uint {
 
 func (c *Config) GetBool(path string, defaultValue bool) bool {
 	return cast.ToBool(c.get(path, defaultValue))
+}
+
+func (c *Config) GetDuration(path string, defaultValue time.Duration) time.Duration {
+	return cast.ToDuration(c.get(path, defaultValue))
 }
