@@ -1,6 +1,7 @@
 package init
 
 import (
+	"github.com/zs368/gin-example/pkg/tracer"
 	"log"
 
 	"github.com/zs368/gin-example/configs"
@@ -20,6 +21,10 @@ func init() {
 
 	if err := setLogger(); err != nil {
 		log.Fatalf("init.setLogger err: %v", err)
+	}
+
+	if err := setTracer(); err != nil {
+		log.Fatalf("init.setTracer err: %v", err)
 	}
 }
 
@@ -50,5 +55,14 @@ func setLogger() error {
 		return err
 	}
 
+	return nil
+}
+
+func setTracer() error {
+	jaegerTracer, _, err := tracer.NewJaegerTracer("gin-example", "127.0.0.1:6831")
+	if err != nil {
+		return err
+	}
+	tracer.Tracer = jaegerTracer
 	return nil
 }
