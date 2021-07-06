@@ -6,6 +6,7 @@ import (
 	"github.com/zs368/gin-example/configs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	gormOpentracing "gorm.io/plugin/opentracing"
 )
 
 var DB *gorm.DB
@@ -28,6 +29,9 @@ func NewDB() (*gorm.DB, error) {
 		SkipInitializeWithVersion: false, // 根据当前 MySQL 版本自动配置
 	}), &gorm.Config{})
 	if err != nil {
+		return nil, err
+	}
+	if err = db.Use(gormOpentracing.New()); err != nil {
 		return nil, err
 	}
 
