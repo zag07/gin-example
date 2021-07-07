@@ -2,7 +2,7 @@ package test
 
 import (
 	"testing"
-	
+
 	"github.com/go-playground/validator/v10"
 	"github.com/stretchr/testify/assert"
 )
@@ -31,11 +31,34 @@ func init() {
 // necsfield			Field Does Not Equal Another Field (relative)
 // nefield				Field Does Not Equal Another Field
 func TestFieldsTag(t *testing.T) {
-	var (
-		password        = "asd"
-		confirmPassword = "asd"
-		err             = validate.VarWithValue(password, confirmPassword, "eqfield")
-	)
+	type B struct {
+		Z string
+	}
+	type A struct {
+		X   string `validate:"eqfield=Y"`
+		Y   string `validate:"eqcsfield=BBB.Z"`
+		BBB *B
+	}
+	param := &A{
+		X:   "asd",
+		Y:   "asd",
+		BBB: &B{Z: "asd"},
+	}
+	err = validate.Struct(param)
+	assert.NoError(t, err)
+
+	param2 := struct {
+		X   string `validate:"gtfield=Y"`
+		Y   string `validate:"gtcsfield=ZZZ.Z"`
+		ZZZ struct {
+			Z string
+		}
+	}{
+		X:   "hahaha",
+		Y:   "haha",
+		ZZZ: struct{ Z string }{Z: "ha"},
+	}
+	err = validate.Struct(param2)
 	assert.NoError(t, err)
 }
 
@@ -66,7 +89,17 @@ func TestFieldsTag(t *testing.T) {
 // url_encoded			URL Encoded
 // urn_rfc2141			Urn RFC 2141 String
 func TestNetworkTag(t *testing.T) {
+	hostname := "google.com"
+	err = validate.Var(hostname, "hostname")
+	assert.NoError(t, err)
 
+	ip := "127.0.0.1"
+	err = validate.Var(ip, "ip")
+	assert.NoError(t, err)
+
+	uri := "http://google.com"
+	err = validate.Var(uri, "uri")
+	assert.NoError(t, err)
 }
 
 // alpha				Alpha Only
@@ -86,7 +119,21 @@ func TestNetworkTag(t *testing.T) {
 // startswith			Starts With
 // uppercase			Uppercase
 func TestStringsTag(t *testing.T) {
+	contains := "hehe@hehe.com"
+	err = validate.Var(contains, "contains=@")
+	assert.NoError(t, err)
 
+	endswith := "bye bye,my lover"
+	err = validate.Var(endswith, "endswith=lover")
+	assert.NoError(t, err)
+
+	number := -123.12
+	err = validate.Var(number, "number")
+	assert.NoError(t, err)
+
+	numeric := -123.12
+	err = validate.Var(numeric, "numeric")
+	assert.NoError(t, err)
 }
 
 // base64				Base64 String
@@ -121,8 +168,24 @@ func TestStringsTag(t *testing.T) {
 // uuid5_rfc4122		Universally Unique Identifier UUID v5 RFC4122
 // uuid_rfc4122			Universally Unique Identifier UUID RFC4122
 func TestFormatTag(t *testing.T) {
+	base64 := "aGFoYWhh"
+	err = validate.Var(base64, "base64")
+	assert.NoError(t, err)
+
+	datetime := "2021-07-07 15:40:45"
+	err = validate.Var(datetime, "datetime=2006-01-02 15:04:05")
+	assert.NoError(t, err)
+
 	email := "aaa@gmail.com"
-	err = validate.Var(email, "required,email")
+	err = validate.Var(email, "email")
+	assert.NoError(t, err)
+
+	html := "<!DOCTYPE html>\n<html lang=\"en\"></html>"
+	err = validate.Var(html, "html")
+	assert.NoError(t, err)
+
+	json := "{\"zzz\": 1}"
+	err = validate.Var(json, "json")
 	assert.NoError(t, err)
 }
 
@@ -133,9 +196,21 @@ func TestFormatTag(t *testing.T) {
 // lte					Less Than or Equal
 // ne					Not Equal
 func TestComparisonsTag(t *testing.T) {
+	eq := "asd"
+	err = validate.Var(eq, "eq=asd")
+	assert.NoError(t, err)
 
+	gte := "qwer"
+	err = validate.Var(gte, "gte=4")
+	assert.NoError(t, err)
 }
 
+// -					Skip Field
+// |					Or Operator
+// structonly			StructOnly
+// nostructlevel		NoStructLevel
+// omitempty			Omit Empty
+// dive					Dive
 // dir					Directory
 // endswith				Ends With
 // excludes				Excludes
@@ -160,7 +235,35 @@ func TestComparisonsTag(t *testing.T) {
 // excluded_without_all	Excluded Without All
 // unique				Unique
 func TestOtherTag(t *testing.T) {
-	isDefault := ""
-	err = validate.Var(isDefault, "isdefault")
+	omitempty := ""
+	err = validate.Var(omitempty, "omitempty")
+	assert.NoError(t, err)
+
+	dir := "./"
+	err = validate.Var(dir, "dir")
+	assert.NoError(t, err)
+
+	file := "./validator_test.go"
+	err = validate.Var(file, "file")
+	assert.NoError(t, err)
+
+	isdefault := ""
+	err = validate.Var(isdefault, "isdefault")
+	assert.NoError(t, err)
+
+	lenTag := 99
+	err = validate.Var(lenTag, "len=99")
+	assert.NoError(t, err)
+
+	lenTagS := "123456"
+	err = validate.Var(lenTagS, "len=6")
+	assert.NoError(t, err)
+
+	oneof := 1
+	err = validate.Var(oneof, "oneof=1 2")
+	assert.NoError(t, err)
+
+	required := "1"
+	err = validate.Var(required, "required")
 	assert.NoError(t, err)
 }
