@@ -124,24 +124,23 @@ func (a Article) Update(c *gin.Context) {
 		data    = map[string]interface{}{}
 	)
 
-	if params.Title != "" {
-		data["title"] = params.Title
+	if params.Title != nil {
+		data["title"] = *params.Title
 	}
-	if params.Desc != "" {
-		data["desc"] = params.Desc
+	if params.Desc != nil {
+		data["desc"] = *params.Desc
 	}
-	if params.Content != "" {
-		data["content"] = params.Content
+	if params.Content != nil {
+		data["content"] = *params.Content
 	}
-	if params.CoverImageUrl != "" {
-		data["cover_image_url"] = params.CoverImageUrl
+	if params.CoverImageUrl != nil {
+		data["cover_image_url"] = *params.CoverImageUrl
 	}
-	// TODO 状态为0的时候
-	if params.State != 0 {
-		data["state"] = params.State
+	if params.State != nil {
+		data["state"] = *params.State
 	}
-	if params.CoverImageUrl != "" {
-		data["updated_by"] = params.CoverImageUrl
+	if params.CoverImageUrl != nil {
+		data["updated_by"] = *params.CoverImageUrl
 	}
 	// TODO id 未查到时，没有数据更新时
 	if err := db.Model(&article).Where("id = ?", params.ID).Updates(data).Error; err != nil {

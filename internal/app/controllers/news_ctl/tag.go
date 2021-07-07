@@ -112,15 +112,25 @@ func (t Tag) Update(c *gin.Context) {
 	}
 
 	var (
-		db  = database.DB
-		tag models.Tag
+		db   = database.DB
+		tag  models.Tag
+		data = map[string]interface{}{}
 	)
 
-	if err := db.Model(&tag).Where("id = ?", params.ID).Updates(models.Tag{
-		Name:      params.Name,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
-	}).Error; err != nil {
+	if params.Name != nil {
+		data["name"] = *params.Name
+	}
+	if params.State != nil {
+		data["state"] = *params.State
+	}
+	if params.CreatedBy != nil {
+		data["created_by"] = *params.CreatedBy
+	}
+	if params.UpdatedBy != nil {
+		data["updated_by"] = *params.UpdatedBy
+	}
+
+	if err := db.Model(&tag).Where("id = ?", params.ID).Updates(data).Error; err != nil {
 		r.ToErrorResponse(errcode.TagUpdateFail)
 		return
 	}

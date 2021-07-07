@@ -28,13 +28,13 @@ type ArticleCreateRequest struct {
 }
 
 type ArticleUpdateRequest struct {
-	ID            uint   `json:"id" binding:"required,gte=1"`
-	Title         string `json:"title" binding:"omitempty,min=2,max=100"`
-	Desc          string `json:"desc" binding:"omitempty,min=2,max=255"`
-	CoverImageUrl string `json:"cover_image_url" binding:"omitempty,url"`
-	Content       string `json:"content" binding:"omitempty,min=2,max=4294967295"`
-	State         uint8  `json:"state" binding:"omitempty,oneof=0 1"`
-	UpdatedBy     string `json:"updated_by" binding:"omitempty,min=2,max=100"`
+	ID            uint    `json:"id" binding:"required,gte=1"`
+	Title         *string `json:"title" binding:"omitempty,min=2,max=100"`
+	Desc          *string `json:"desc" binding:"omitempty,min=2,max=255"`
+	CoverImageUrl *string `json:"cover_image_url" binding:"omitempty,url"`
+	Content       *string `json:"content" binding:"omitempty,min=2,max=4294967295"`
+	State         *uint8  `json:"state" binding:"omitempty,oneof=0 1"`
+	UpdatedBy     *string `json:"updated_by" binding:"omitempty,min=2,max=100"`
 }
 
 type ArticleDeleteRequest struct {
