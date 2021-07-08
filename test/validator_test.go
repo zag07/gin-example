@@ -1,3 +1,8 @@
+// 对 go-playground/validator/v10 的拙劣测试
+// 使用方法看源码中的 doc.go
+// 更多测试看源码中的 _examples & validator_test.go
+// 有时间撸下源码也很舒服
+
 package test
 
 import (

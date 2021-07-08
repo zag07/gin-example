@@ -15,7 +15,7 @@ func JWT() gin.HandlerFunc {
 		)
 
 		if token == "" {
-			eCode = errcode.InvalidParams
+			eCode = errcode.InvalidParams.WithDetails("Authorization 未找到")
 		} else {
 			_, err := app.ParseToken(token)
 			if err != nil {

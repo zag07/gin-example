@@ -57,7 +57,7 @@ func CheckFileSize(t FileType, f multipart.File) bool {
 	size := len(content)
 	switch t {
 	case TypeImage:
-		if size <= configs.App.UploadImageMaxSize*1024*1024 {
+		if size <= configs.App.UploadImageMaxSize<<20 {
 			return true
 		}
 	}

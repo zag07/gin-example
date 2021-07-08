@@ -27,7 +27,7 @@ func NewArticle() Article {
 func (a Article) Get(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = news_rule.ArticleGetRequest{}
+		params = news_rule.ArticleGetRequest{ID: cast.ToUint(c.Param("id"))}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -47,6 +47,22 @@ func (a Article) Get(c *gin.Context) {
 	}
 
 	r.ToResponse(res)
+}
+
+func (a Article) List(c *gin.Context) {
+	var (
+		r      = app.NewResponse(c)
+		params = news_rule.ArticleListRequest{}
+	)
+
+	if err := app.BindAndValid(c, &params); err != nil {
+		r.ToErrorResponse(errcode.InvalidParams.WithDetails(err.Errors()...))
+		return
+	}
+
+	// TODO
+	var ()
+
 }
 
 // Create godoc
@@ -142,9 +158,15 @@ func (a Article) Update(c *gin.Context) {
 	if params.CoverImageUrl != nil {
 		data["updated_by"] = *params.CoverImageUrl
 	}
-	// TODO id 未查到时，没有数据更新时
-	if err := db.Model(&article).Where("id = ?", params.ID).Updates(data).Error; err != nil {
-		r.ToErrorResponse(errcode.ArticleUpdateFail.WithDetails(err.Error()))
+
+	result := db.Model(&article).Where("id = ?", params.ID).Updates(data)
+
+	if result.RowsAffected == 0 {
+		r.ToErrorResponse(errcode.ArticleUpdateFail.WithDetails("未找到相关文章"))
+		return
+	}
+	if result.Error != nil {
+		r.ToErrorResponse(errcode.ArticleUpdateFail.WithDetails(result.Error.Error()))
 		return
 	}
 
@@ -162,7 +184,7 @@ func (a Article) Update(c *gin.Context) {
 func (a Article) Delete(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = news_rule.ArticleDeleteRequest{}
+		params = news_rule.ArticleDeleteRequest{ID: cast.ToUint(c.Param("id"))}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -175,8 +197,14 @@ func (a Article) Delete(c *gin.Context) {
 		article models.Article
 	)
 
-	if err := db.Delete(&article, params.ID).Error; err != nil {
-		r.ToErrorResponse(errcode.ArticleDeleteFail.WithDetails(err.Error()))
+	result := db.Delete(&article, params.ID)
+
+	if result.RowsAffected == 0 {
+		r.ToErrorResponse(errcode.ArticleUpdateFail.WithDetails("未找到相关文章"))
+		return
+	}
+	if result.Error != nil {
+		r.ToErrorResponse(errcode.ArticleDeleteFail.WithDetails(result.Error.Error()))
 		return
 	}
 

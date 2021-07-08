@@ -130,8 +130,14 @@ func (t Tag) Update(c *gin.Context) {
 		data["updated_by"] = *params.UpdatedBy
 	}
 
-	if err := db.Model(&tag).Where("id = ?", params.ID).Updates(data).Error; err != nil {
-		r.ToErrorResponse(errcode.TagUpdateFail)
+	result := db.Model(&tag).Where("id = ?", params.ID).Updates(data)
+
+	if result.RowsAffected == 0 {
+		r.ToErrorResponse(errcode.TagUpdateFail.WithDetails("未找到相关标签"))
+		return
+	}
+	if result.Error != nil {
+		r.ToErrorResponse(errcode.TagUpdateFail.WithDetails(result.Error.Error()))
 		return
 	}
 
@@ -149,7 +155,7 @@ func (t Tag) Update(c *gin.Context) {
 func (t Tag) Delete(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = news_rule.TagDeleteRequest{}
+		params = news_rule.TagDeleteRequest{ID: cast.ToUint(c.Param("id"))}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -162,8 +168,14 @@ func (t Tag) Delete(c *gin.Context) {
 		tag models.Tag
 	)
 
-	if err := db.Delete(&tag, params.ID).Error; err != nil {
-		r.ToErrorResponse(errcode.TagDeleteFail.WithDetails(err.Error()))
+	result := db.Delete(&tag, params.ID)
+
+	if result.RowsAffected == 0 {
+		r.ToErrorResponse(errcode.TagDeleteFail.WithDetails("未找到相关标签"))
+		return
+	}
+	if result.Error != nil {
+		r.ToErrorResponse(errcode.TagDeleteFail.WithDetails(result.Error.Error()))
 		return
 	}
 
