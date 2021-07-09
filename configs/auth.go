@@ -1,13 +1,17 @@
 package configs
 
-import "github.com/zs368/gin-example/pkg/config"
+import (
+	"time"
+
+	"github.com/zs368/gin-example/pkg/config"
+)
 
 var Auth auth
 
 type auth struct {
 	JwtSecret string
 	JwtIssuer string
-	JwtExpire uint
+	JwtExpire time.Duration
 }
 
 func SetAuthConfig(c *config.Config) {
@@ -15,5 +19,5 @@ func SetAuthConfig(c *config.Config) {
 
 	Auth.JwtIssuer = c.GetString("JWT_ISSUER", "gin-example")
 
-	Auth.JwtExpire = c.GetUint("JWT_EXPIRE", 7200)
+	Auth.JwtExpire = c.GetDuration("JWT_EXPIRE", 7200)
 }

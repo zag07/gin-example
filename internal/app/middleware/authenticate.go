@@ -9,31 +9,29 @@ import (
 
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var (
-			eCode = errcode.Success
-			token = c.GetHeader("Authorization")
-		)
+		r := app.NewResponse(c)
+		token := c.GetHeader("Authorization")
 
 		if token == "" {
-			eCode = errcode.InvalidParams.WithDetails("Authorization 未找到")
-		} else {
-			_, err := app.ParseToken(token)
-			if err != nil {
-				switch err.(*jwt.ValidationError).Errors {
-				case jwt.ValidationErrorExpired:
-					eCode = errcode.UnauthorizedTokenTimeout
-				default:
-					eCode = errcode.UnauthorizedTokenError
-				}
-			}
-		}
-
-		if eCode != errcode.Success {
-			app.NewResponse(c).ToErrorResponse(eCode)
+			r.ToErrorResponse(errcode.UnauthorizedTokenNotFound)
 			c.Abort()
 			return
 		}
 
+		claims, err := app.ParseToken(token)
+
+		if err != nil {
+			switch err.(*jwt.ValidationError).Errors {
+			case jwt.ValidationErrorExpired:
+				r.ToErrorResponse(errcode.UnauthorizedTokenTimeout)
+			default:
+				r.ToErrorResponse(errcode.UnauthorizedTokenError)
+			}
+			c.Abort()
+			return
+		}
+
+		c.Set("claims", claims)
 		c.Next()
 	}
 }

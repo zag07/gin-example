@@ -1,51 +1,54 @@
 package app
 
 import (
+	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/spf13/cast"
 	"github.com/zs368/gin-example/configs"
-	"github.com/zs368/gin-example/internal/pkg/utils"
 )
 
-type Claims struct {
+// TODO 后面改掉 不能存敏感信息到 token 中
+type UserInfo struct {
+	Uid      uint   `json:"uid"`
 	Username string `json:"username"`
-	Password string `json:"password"`
-	jwt.StandardClaims
+	Role     string `json:"role"`
+}
+
+type Claims struct {
+	*jwt.StandardClaims
+	UserInfo
 }
 
 func GetJWTSecret() []byte {
 	return []byte(configs.Auth.JwtSecret)
 }
 
-func GenerateToken(Username, Password string) (string, error) {
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims{
-		Username: utils.EncodeMD5(Username),
-		Password: utils.EncodeMD5(Password),
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(cast.ToDuration(configs.Auth.JwtExpire)).Unix(),
+func GenerateToken(user UserInfo) (string, error) {
+	t := jwt.New(jwt.GetSigningMethod("HS256"))
+
+	t.Claims = &Claims{
+		&jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(configs.Auth.JwtExpire).Unix(),
 			Issuer:    configs.Auth.JwtIssuer,
 		},
-	}).SignedString(GetJWTSecret())
+		user,
+	}
 
-	return token, err
+	return t.SignedString(GetJWTSecret())
 }
 
-func ParseToken(token string) (*Claims, error) {
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+func ParseToken(tokenString string) (*Claims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return GetJWTSecret(), nil
 	})
-
 	if err != nil {
 		return nil, err
 	}
-	if tokenClaims != nil {
-		claims, ok := tokenClaims.Claims.(*Claims)
-		if ok && tokenClaims.Valid {
-			return claims, nil
-		}
+
+	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
+		return claims, nil
 	}
 
-	return nil, err
+	return nil, errors.New("invalid token")
 }

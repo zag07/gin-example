@@ -68,6 +68,7 @@ Go in Action
 
 - [ ] jwt
 - [ ] gorm
+- [ ] jaeger
 - [ ] grpc
 - [ ] log
 - [ ] cli scaffold

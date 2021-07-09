@@ -29,7 +29,9 @@ func (a Auth) Login(c *gin.Context) {
 	var (
 		db = database.DB
 		u  = struct {
+			Id   uint   `json:"id"`
 			Name string `json:"name"`
+			Role string `json:"role"`
 		}{}
 		user models.User
 	)
@@ -39,7 +41,12 @@ func (a Auth) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := app.GenerateToken(params.Username, params.Password)
+	token, err := app.GenerateToken(app.UserInfo{
+		Uid:      1,
+		Username: "zs",
+		Role:     "admin",
+	})
+
 	if err != nil {
 		r.ToErrorResponse(errcode.UnauthorizedTokenGenerate)
 		return
