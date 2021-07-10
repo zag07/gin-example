@@ -38,6 +38,8 @@
 
 ### Dependencies
 
+[JWT](https://github.com/golang-jwt/jwt)
+
 [Swagger](https://github.com/swaggo/swag)
 
 
@@ -48,11 +50,15 @@ The Go Programming Language
 
 Go in Action
 
+[Documentation](https://golang.org/doc/)
+
 [Go 语言编程之旅](https://golang2.eddycjy.com/)
 
 
 
 ### Recommended Blog
+
+[The Go Blog](https://blog.golang.org/)
 
 [Why Golang Nil Is Not Always Nil? Nil Explained](https://codefibershq.com/blog/golang-why-nil-is-not-always-nil)
 
