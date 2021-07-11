@@ -76,6 +76,7 @@ Go in Action
 - [ ] gorm
 - [ ] jaeger
 - [ ] grpc
+- [ ] websocket
 - [ ] log
 - [ ] cli scaffold
 - [ ] graphql
