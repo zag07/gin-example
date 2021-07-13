@@ -18,10 +18,9 @@ import (
 // @title gin-example
 // @version 0.0.1
 func main() {
-	router := routing.NewRouter()
 	srv := &http.Server{
 		Addr:    ":" + configs.App.Port,
-		Handler: router,
+		Handler: routing.NewRouter(),
 	}
 
 	go func() {

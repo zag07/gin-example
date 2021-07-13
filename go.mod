@@ -11,6 +11,7 @@ require (
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/golang-jwt/jwt v3.2.1+incompatible
+	github.com/gorilla/websocket v1.4.2
 	github.com/juju/ratelimit v1.0.1
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/sirupsen/logrus v1.8.1

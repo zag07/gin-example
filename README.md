@@ -58,7 +58,9 @@ Go in Action
 
 ### Recommended Blog
 
-[The Go Blog](https://blog.golang.org/)
+[The Go Blog](https://blog.golang.org/index)
+
+[ExperienceReports](https://github.com/golang/go/wiki/ExperienceReports)
 
 [Why Golang Nil Is Not Always Nil? Nil Explained](https://codefibershq.com/blog/golang-why-nil-is-not-always-nil)
 

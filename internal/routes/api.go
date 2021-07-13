@@ -15,14 +15,18 @@ func SetApiRouter(r *gin.Engine) {
 	auth := system_ctl.NewAuth()
 	r.POST("/login", auth.Login)
 
-	c := r.Group("/c").Use(middleware.JWT())
+	c := r.Group("/c")
 	{
 		upload := common_ctl.NewUpload()
 		c.POST("/upload/file", upload.UploadFile)
 		c.StaticFS("/static", http.Dir(configs.App.UploadSavePath))
 	}
 
-	apiV1 := r.Group("/api/v1")
+	apiV1 := r.Group("/api/v1").
+		Use(middleware.JWT()).
+		Use(middleware.Translations()).
+		Use(middleware.Tracing()).
+		Use(middleware.ContextTimeout(configs.App.DefaultContextTimeout))
 	{
 		article := news_ctl.NewArticle()
 		apiV1.GET("/article/:id", article.Get)
