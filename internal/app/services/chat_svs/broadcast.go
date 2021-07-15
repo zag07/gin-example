@@ -1,41 +1,77 @@
 package chat_svs
 
-type Broadcaster struct {
-	users      map[*User]bool
-	register   chan *User
-	unregister chan *User
-	messages   chan []byte
+import (
+	"log"
+
+	"github.com/zs368/gin-example/configs"
+)
+
+type broadcaster struct {
+	users    map[*User]bool
+	entering chan *User
+	leaving  chan *User
+	send     chan []byte
+	messages chan *Message
 }
 
-func NewBroadcaster() *Broadcaster {
-	return &Broadcaster{
-		users:      make(map[*User]bool),
-		register:   make(chan *User),
-		unregister: make(chan *User),
-		messages:   make(chan []byte),
-	}
+var Broadcaster = &broadcaster{
+	users:    make(map[*User]bool),
+	entering: make(chan *User),
+	leaving:  make(chan *User),
+	send:     make(chan []byte),
+	messages: make(chan *Message, configs.WS.MessageQueue),
 }
 
-func (b *Broadcaster) Run() {
+func (b *broadcaster) Run() {
 	for {
 		select {
-		case user := <-b.register:
+		case user := <-b.entering:
 			b.users[user] = true
-		case user := <-b.unregister:
+			OfflineProcessor.Send(user)
+		case user := <-b.leaving:
 			if _, ok := b.users[user]; ok {
 				delete(b.users, user)
 				close(user.send)
 			}
-		case message := <-b.messages:
+		case s := <-b.send:
 			for user := range b.users {
 				select {
-				case user.send <- message:
+				case user.send <- s:
 				default:
 					delete(b.users, user)
 					close(user.send)
 				}
 			}
-
+		case msg := <-b.messages:
+			for user := range b.users {
+				if user.Uid == msg.User.Uid {
+					continue
+				}
+				select {
+				case user.messages <- msg:
+				default:
+					delete(b.users, user)
+					close(user.send)
+				}
+			}
+			OfflineProcessor.Save(msg)
 		}
 	}
+}
+
+func (b *broadcaster) Broadcast(msg *Message) {
+	if len(b.messages) >= configs.WS.MessageQueue {
+		log.Println("broadcast queue 满了")
+	}
+	b.messages <- msg
+}
+
+func (b *broadcaster) GetUserList() []*User {
+	userList := make([]*User, 0, len(b.users))
+	for user, exist := range b.users {
+		if exist == true {
+			userList = append(userList, user)
+		}
+	}
+	return userList
 }

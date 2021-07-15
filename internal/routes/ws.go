@@ -7,13 +7,14 @@ import (
 )
 
 func SetWSRouter(r *gin.Engine) {
-	broadcaster := chat_svs.NewBroadcaster()
-	go broadcaster.Run()
+	go chat_svs.Broadcaster.Run()
 
 	c := r.Group("/chat")
 	{
 		chat := chat_ctl.NewChat()
 		c.GET("/", chat.Home)
-		c.GET("/ws", chat.WS(broadcaster))
+		c.GET("/2", chat.Home2)
+		c.GET("/user_list", chat.UserList)
+		c.GET("/ws", chat.WS)
 	}
 }

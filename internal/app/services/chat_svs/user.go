@@ -2,55 +2,82 @@ package chat_svs
 
 import (
 	"bytes"
+	"encoding/json"
 	"log"
 	"net/http"
+	"sync/atomic"
 	"time"
 
 	"github.com/gorilla/websocket"
-)
-
-const (
-	writeWait      = 10 * time.Second
-	pongWait       = 60 * time.Second
-	pingPeriod     = (pongWait * 9) / 10
-	maxMessageSize = 512
+	"github.com/zs368/gin-example/configs"
+	"github.com/zs368/gin-example/internal/pkg/app"
 )
 
 var (
-	newline = []byte{'\n'}
-	space   = []byte{' '}
+	writeWait      = configs.WS.WriteWait
+	pongWait       = configs.WS.PongWait
+	pingPeriod     = (pongWait * 9) / 10
+	maxMessageSize = configs.WS.MaxMessageSize
+	newline        = []byte{'\n'}
+	space          = []byte{' '}
+
+	globalUID uint32 = 0
 )
 
 var upgrader = websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
 
 type User struct {
-	broadcast *Broadcaster
-	conn      *websocket.Conn
-	send      chan []byte
+	Uid      uint      `json:"uid"`
+	Username string    `json:"nickname"`
+	EnterAt  time.Time `json:"enter_at"`
+	Addr     string    `json:"addr"`
+	Token    string    `json:"token"`
+
+	conn     *websocket.Conn
+	send     chan []byte
+	messages chan *Message
 }
 
-// ServeWs handles websocket requests from the peer.
-func ServeWs(b *Broadcaster, w http.ResponseWriter, r *http.Request) {
-	coon, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println(err)
-		return
-	}
+var system = &User{}
+
+func NewUser(coon *websocket.Conn, r *http.Request) (*User, error) {
 	user := &User{
-		broadcast: b,
-		conn:      coon,
-		send:      make(chan []byte, 256),
-	}
-	user.broadcast.register <- user
+		Username: r.FormValue("nickname"),
+		EnterAt:  time.Now(),
+		Addr:     r.RemoteAddr,
 
-	go user.writePump()
-	go user.readPump()
+		conn:     coon,
+		send:     make(chan []byte, 256),
+		messages: make(chan *Message, 32),
+	}
+
+	if user.Token != "" {
+		claims, err := app.ParseToken(r.FormValue("token"))
+		if err != nil {
+			user.messages <- NewErrorMsg("token 生成失败")
+			return nil, err
+		}
+		user.Uid = claims.Uid
+	}
+
+	if user.Uid == 0 {
+		user.Uid = uint(atomic.AddUint32(&globalUID, 1))
+		token, err := app.GenerateToken(app.UserInfo{Uid: user.Uid, Username: user.Username})
+		if err != nil {
+			user.messages <- NewErrorMsg("token 解析失败")
+			return nil, err
+		}
+		user.Token = token
+	}
+
+	return user, nil
 }
 
-// readPump pumps messages from the websocket connection to the broadcast.
+// readPump pumps messages from the websocket connection to the broadcaster.
 func (u *User) readPump() {
 	defer func() {
-		u.broadcast.unregister <- u
+		Broadcaster.leaving <- u
+		Broadcaster.Broadcast(NewUserLeaveMsg(u))
 		u.conn.Close()
 	}()
 
@@ -70,11 +97,22 @@ func (u *User) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		u.broadcast.messages <- message
+
+		if bytes.Index(message, []byte("content")) != -1 {
+			var msg map[string]string
+			if err := json.Unmarshal(message, &msg); err != nil {
+				log.Printf("error: %v", err)
+				break
+			}
+
+			Broadcaster.messages <- NewMsg(u, msg["content"])
+		} else {
+			Broadcaster.send <- message
+		}
 	}
 }
 
-// writePump pumps messages from the broadcast to the websocket connection.
+// writePump pumps messages from the broadcaster to the websocket connection.
 func (u *User) writePump() {
 	tricker := time.NewTicker(pingPeriod)
 	defer func() {
@@ -106,6 +144,14 @@ func (u *User) writePump() {
 			if err := w.Close(); err != nil {
 				return
 			}
+		case message, ok := <-u.messages:
+			u.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				u.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+
+			u.conn.WriteJSON(message)
 		case <-tricker.C:
 			u.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := u.conn.WriteMessage(websocket.PingMessage, nil); err != nil {

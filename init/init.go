@@ -15,7 +15,7 @@ func init() {
 		log.Println("init.setConfig err: %v, %v", err, "将使用默认值")
 	}
 
-	if err := setDatabase(); err != nil {
+	/*if err := setDatabase(); err != nil {
 		log.Fatalf("init.setDatabase err: %v", err)
 	}
 
@@ -25,7 +25,7 @@ func init() {
 
 	if err := setTracer(); err != nil {
 		log.Fatalf("init.setTracer err: %v", err)
-	}
+	}*/
 }
 
 func setConfig() error {
@@ -35,7 +35,9 @@ func setConfig() error {
 	}
 
 	c.SetConfig("APP", configs.SetAppConfig)
+	c.SetConfig("AUTH", configs.SetAuthConfig)
 	c.SetConfig("DATABASE", configs.SetDbConfig)
+	c.SetConfig("WS", configs.SetWSConfig)
 
 	return nil
 }

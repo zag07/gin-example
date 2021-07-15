@@ -1,8 +1,7 @@
+# Gin Example
 
 
-
-
-### Directory Structure
+## Directory Structure
 
 
 ```text
@@ -36,49 +35,34 @@
 
 
 
-### Dependencies
+## Recommended
 
-[JWT](https://github.com/golang-jwt/jwt)
-
-[Swagger](https://github.com/swaggo/swag)
-
-
-
-### Recommended Books
-
-The Go Programming Language
-
-Go in Action
-
-[Documentation](https://golang.org/doc/)
-
-[Go 语言编程之旅](https://golang2.eddycjy.com/)
-
-
-
-### Recommended Blog
-
-[The Go Blog](https://blog.golang.org/index)
-
-[ExperienceReports](https://github.com/golang/go/wiki/ExperienceReports)
-
-[Why Golang Nil Is Not Always Nil? Nil Explained](https://codefibershq.com/blog/golang-why-nil-is-not-always-nil)
+- [The Go Blog](https://blog.golang.org/index)
+- [The Go Doc](https://golang.org/doc/)
+- [The Go Wiki](https://github.com/golang/go/wiki)
+- [The Go Pkg](https://pkg.go.dev/)
+- 
+- **Books**
+  - The Go Programming Language
+  - Go in Action
+  - [Go 语言编程之旅](https://golang2.eddycjy.com/)
+- 
+- **Blogs**
+  - [Why Golang Nil Is Not Always Nil? Nil Explained](https://codefibershq.com/blog/golang-why-nil-is-not-always-nil)
+- 
+- **Projects**
+  - [blog-service](https://github.com/go-programming-tour-book/blog-service)
+  - [chatroom](https://github.com/polaris1119/chatroom)
 
 
 
-
-### Recommended Project
-
-[blog-service](https://github.com/go-programming-tour-book/blog-service)
-
-
-### TODO 
+## TODO 
 
 - [ ] jwt
 - [ ] gorm
 - [ ] jaeger
 - [ ] grpc
-- [ ] websocket
+- [x] websocket
 - [ ] log
 - [ ] cli scaffold
 - [ ] graphql
