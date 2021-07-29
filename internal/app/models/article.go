@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type Article struct {
 	gorm.Model
 	Title         string `json:"title"`
-	Desc          string `json:"desc"`
+	Desc          string `json:"desc" gorm:"default:haha"`
 	CoverImageUrl string `json:"cover_image_url"`
 	Content       string `json:"content"`
 	State         uint8  `json:"state"`
@@ -15,4 +15,9 @@ type Article struct {
 
 func (Article) TableName() string {
 	return "article"
+}
+
+func (a *Article) BeforeCreate(tx *gorm.DB) error {
+	a.CoverImageUrl = "https://google.com/"
+	return nil
 }

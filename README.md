@@ -59,7 +59,7 @@
 ## TODO 
 
 - [ ] jwt
-- [ ] gorm
+- [X] gorm
 - [ ] jaeger
 - [ ] grpc
 - [x] websocket
