@@ -27,7 +27,7 @@ func NewTag() Tag {
 func (t Tag) Get(c *gin.Context) {
 	var (
 		r      = app.NewResponse(c)
-		params = news_rule.TagGetRequest{}
+		params = news_rule.TagGetRequest{ID: cast.ToUint(c.Param("id"))}
 	)
 
 	if err := app.BindAndValid(c, &params); err != nil {
@@ -120,8 +120,8 @@ func (t Tag) Update(c *gin.Context) {
 	if params.Name != nil {
 		data["name"] = *params.Name
 	}
-	if params.State != nil {
-		data["state"] = *params.State
+	if params.Status != nil {
+		data["status"] = *params.Status
 	}
 	if params.CreatedBy != nil {
 		data["created_by"] = *params.CreatedBy

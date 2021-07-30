@@ -8,7 +8,7 @@ type Article struct {
 	Desc          string `json:"desc" gorm:"default:haha"`
 	CoverImageUrl string `json:"cover_image_url"`
 	Content       string `json:"content"`
-	State         uint8  `json:"state"`
+	Status        uint8  `json:"status"`
 	CreatedBy     string `json:"created_by"`
 	UpdatedBy     string `json:"updated_by"`
 }

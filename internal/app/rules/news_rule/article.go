@@ -36,7 +36,7 @@ type ArticleUpdateRequest struct {
 	Desc          *string `form:"desc" json:"desc" binding:"omitempty,min=2,max=255"`
 	CoverImageUrl *string `form:"cover_image_url" json:"cover_image_url" binding:"omitempty,url"`
 	Content       *string `form:"content" json:"content" binding:"omitempty,min=2,max=4294967295"`
-	State         *uint8  `form:"state" json:"state" binding:"omitempty,oneof=0 1"`
+	Status        *uint8  `form:"status" json:"status" binding:"omitempty,oneof=0 1"`
 	UpdatedBy     *string `form:"updated_by" json:"updated_by" binding:"omitempty,min=2,max=100"`
 }
 

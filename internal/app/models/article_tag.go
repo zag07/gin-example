@@ -6,7 +6,7 @@ type ArticleTag struct {
 	gorm.Model
 	ArticleID uint32 `json:"article_id"`
 	TagID     uint32 `json:"tag_id"`
-	State     uint8  `json:"state"`
+	Status    uint8  `json:"status"`
 	CreatedBy string `json:"created_by"`
 	UpdatedBy uint32 `json:"updated_by"`
 }

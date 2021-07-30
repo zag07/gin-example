@@ -152,8 +152,8 @@ func (a Article) Update(c *gin.Context) {
 	if params.CoverImageUrl != nil {
 		data["cover_image_url"] = *params.CoverImageUrl
 	}
-	if params.State != nil {
-		data["state"] = *params.State
+	if params.Status != nil {
+		data["status"] = *params.Status
 	}
 	if params.CoverImageUrl != nil {
 		data["updated_by"] = *params.CoverImageUrl
