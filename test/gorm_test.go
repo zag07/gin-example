@@ -208,5 +208,62 @@ func TestAdvancedQuery(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	var article models.Article
 
+	// 默认执行 hook 方法，如要跳过使用 UpdateColumn 方法
+	db.Debug().Model(&article).Where("id = ?", 5).
+		Updates(map[string]interface{}{"title": "hahaha", "status": gorm.Expr("status + ?", 1)})
+
+	db.Debug().Find(&article, 3)
+
+	// article.Title = "测试update"
+	// db.Debug().Save(&article)	// 没有则新增
+
+	// 默认是阻止全局更新的
+	db.Debug().Model(&article).Update("title", "111test update") // UPDATE `article` SET `title`='test update',`updated_at`='2021-08-02 10:09:23.132'
+
+	// 执行全局更新  1、原生 sql 2、启用 AllowGlobalUpdate 模式
+	// db.Exec("UPDATE `article` SET `title` = '123'")
+	// db.Debug().Session(&gorm.Session{AllowGlobalUpdate: true}).Model(&article).Update("title", "123")
+
+}
+
+func TestDelete(t *testing.T) {
+	var article models.Article
+
+	// 最好不要使用这种
+	// db.Debug().Where("title = ?", "zs").Delete(&article)
+
+	// 推荐用法
+	// db.Debug().Delete(&article, []int{10})
+
+	// 与 update 一样，默认阻止全局删除
+
+	// 使用 Unscoped 查找软删除记录或者进行永久删除
+	db.Debug().Unscoped().Find(&article, 10)
+
+	fmt.Printf("%+v\n", article)
+}
+
+func TestSQL(t *testing.T) {
+	var article models.Article
+
+	// db.Debug().Raw("SELECT id, title FROM `article` WHERE id = ?", 4).Scan(&article)
+	// db.Debug().Exec("UPDATE `article` SET title = ? WHERE id = ?", "zzz", 4)
+
+	// 生成 sql 不执行，没多大意思
+	// stmt := db.Session(&gorm.Session{DryRun: true}).First(&article, 1).Statement
+	// stmt.SQL.String() // SELECT * FROM `article` WHERE `article`.`id` = ? AND `article`.`deleted_at` IS NULL ORDER BY `article`.`id` LIMIT 1
+	// stmt.Vars         // []interface{}{1}
+
+	// var id uint
+	// var title string
+	// row := db.Debug().Raw("select id, title from article where id = 5").Row()
+	// row.Scan(&id, &title)
+
+	fmt.Printf("%+v\n", article)
+}
+
+func TestAssociate(t *testing.T) {
+	// https://gorm.io/docs/belongs_to.html
 }
