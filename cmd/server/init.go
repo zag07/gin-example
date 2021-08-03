@@ -7,7 +7,7 @@ import (
 	"github.com/zs368/gin-example/pkg/config"
 	"github.com/zs368/gin-example/pkg/database"
 	zLog "github.com/zs368/gin-example/pkg/log"
-	"github.com/zs368/gin-example/pkg/tracer"
+	"github.com/zs368/gin-example/pkg/trace"
 )
 
 func init() {
@@ -15,17 +15,17 @@ func init() {
 		log.Println("init.setConfig err: %v, %v", err, "将使用默认值")
 	}
 
-	/*if err := setDatabase(); err != nil {
+	if err := setDatabase(); err != nil {
 		log.Fatalf("init.setDatabase err: %v", err)
 	}
 
-	if err := setLogger(); err != nil {
+	/*if err := setLogger(); err != nil {
 		log.Fatalf("init.setLogger err: %v", err)
-	}
+	}*/
 
 	if err := setTracer(); err != nil {
 		log.Fatalf("init.setTracer err: %v", err)
-	}*/
+	}
 }
 
 func setConfig() error {
@@ -61,10 +61,9 @@ func setLogger() error {
 }
 
 func setTracer() error {
-	jaegerTracer, _, err := tracer.NewJaegerTracer("gin-example", "127.0.0.1:6831")
-	if err != nil {
+	if _, err := trace.InitGlobalTracer("gin-example", "127.0.0.1:6831"); err != nil {
 		return err
 	}
-	tracer.Tracer = jaegerTracer
+
 	return nil
 }

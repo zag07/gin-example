@@ -7,11 +7,10 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/uber/jaeger-client-go"
-	"github.com/zs368/gin-example/pkg/tracer"
 )
 
-func Tracing() func(c *gin.Context) {
-	return func(c *gin.Context) {
+func Tracing() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
 		var (
 			newCtx context.Context
 			span   opentracing.Span
@@ -19,19 +18,17 @@ func Tracing() func(c *gin.Context) {
 
 		spanCtx, err := opentracing.GlobalTracer().Extract(
 			opentracing.HTTPHeaders,
-			opentracing.HTTPHeadersCarrier(c.Request.Header),
+			opentracing.HTTPHeadersCarrier(ctx.Request.Header),
 		)
 		if err != nil {
-			span, newCtx = opentracing.StartSpanFromContextWithTracer(
-				c.Request.Context(),
-				tracer.Tracer,
-				c.Request.URL.Path,
+			span, newCtx = opentracing.StartSpanFromContext(
+				ctx.Request.Context(),
+				ctx.Request.URL.Path,
 			)
 		} else {
-			span, newCtx = opentracing.StartSpanFromContextWithTracer(
-				c.Request.Context(),
-				tracer.Tracer,
-				c.Request.URL.Path,
+			span, newCtx = opentracing.StartSpanFromContext(
+				ctx.Request.Context(),
+				ctx.Request.URL.Path,
 				opentracing.ChildOf(spanCtx),
 				opentracing.Tag{Key: string(ext.Component), Value: "HTTP"},
 			)
@@ -50,9 +47,9 @@ func Tracing() func(c *gin.Context) {
 			traceID = jaegerContext.TraceID().String()
 			spanID = jaegerContext.SpanID().String()
 		}
-		c.Set("X-Trace-ID", traceID)
-		c.Set("X-Span-ID", spanID)
-		c.Request = c.Request.WithContext(newCtx)
-		c.Next()
+		ctx.Set("X-Trace-ID", traceID)
+		ctx.Set("X-Span-ID", spanID)
+		ctx.Request = ctx.Request.WithContext(newCtx)
+		ctx.Next()
 	}
 }
