@@ -9,8 +9,8 @@
 │   ├── static
 │   └── template
 ├── cmd
+│   └── server
 ├── configs
-├── init
 ├── docs
 ├── internal
 │   ├── app
@@ -27,7 +27,6 @@
 │   └── tracer 
 ├── storage
 ├── test
-├── main.go
 ├── go.mod
 ├── go.sum
 ├── ...

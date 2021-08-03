@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/zs368/gin-example/configs"
-	_ "github.com/zs368/gin-example/init"
 	"github.com/zs368/gin-example/pkg/routing"
 )
 

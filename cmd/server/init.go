@@ -1,13 +1,13 @@
-package init
+package main
 
 import (
-	"github.com/zs368/gin-example/pkg/tracer"
 	"log"
 
 	"github.com/zs368/gin-example/configs"
 	"github.com/zs368/gin-example/pkg/config"
 	"github.com/zs368/gin-example/pkg/database"
 	zLog "github.com/zs368/gin-example/pkg/log"
+	"github.com/zs368/gin-example/pkg/tracer"
 )
 
 func init() {
