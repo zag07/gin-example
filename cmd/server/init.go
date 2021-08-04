@@ -19,9 +19,9 @@ func init() {
 		log.Fatalf("init.setDatabase err: %v", err)
 	}
 
-	/*if err := setLogger(); err != nil {
+	if err := setLogger(); err != nil {
 		log.Fatalf("init.setLogger err: %v", err)
-	}*/
+	}
 
 	if err := setTracer(); err != nil {
 		log.Fatalf("init.setTracer err: %v", err)
@@ -52,11 +52,9 @@ func setDatabase() error {
 }
 
 func setLogger() error {
-	var err error
-	if zLog.Logger, err = zLog.NewLogger("storage/logs/logrus.log"); err != nil {
+	if err := zLog.InitLogger(); err != nil {
 		return err
 	}
-
 	return nil
 }
 

@@ -14,7 +14,6 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/juju/ratelimit v1.0.1
 	github.com/opentracing/opentracing-go v1.2.0
-	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cast v1.3.1
 	github.com/spf13/viper v1.8.0
 	github.com/stretchr/testify v1.7.0
@@ -22,6 +21,7 @@ require (
 	github.com/swaggo/swag v1.7.0
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
+	go.uber.org/zap v1.18.1
 	gorm.io/driver/mysql v1.1.1
 	gorm.io/gorm v1.21.11
 	gorm.io/plugin/opentracing v0.0.0-20210506132430-24a9caea7709

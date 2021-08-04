@@ -23,9 +23,10 @@ func SetApiRouter(r *gin.Engine) {
 	}
 
 	apiV1 := r.Group("/api/v1").
-		Use(middleware.JWT()).
+		// Use(middleware.JWT()).
 		Use(middleware.Translations()).
 		Use(middleware.Tracing()).
+		Use(middleware.Logger()).
 		Use(middleware.ContextTimeout(configs.App.DefaultContextTimeout))
 	{
 		article := news_ctl.NewArticle()
