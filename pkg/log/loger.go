@@ -1,9 +1,11 @@
 package log
 
 import (
+	"io"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"os"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 // InitLogger 将日志写入本地文件
@@ -17,8 +19,8 @@ func InitLogger() error {
 		},
 		Encoding:         "json",
 		EncoderConfig:    zap.NewProductionEncoderConfig(),
-		OutputPaths:      []string{"storage/logs/default.log"},
-		ErrorOutputPaths: []string{"storage/logs/default.log"},
+		OutputPaths:      []string{"storage/logs/log.log"},
+		ErrorOutputPaths: []string{"storage/logs/log.log"},
 	}.Build()
 	if err != nil {
 		return err
@@ -30,45 +32,26 @@ func InitLogger() error {
 
 // CustomLogger 按级别切割文件、按大小切割文件
 func CustomLogger() error {
-	file, _ := os.Create("storage/logs/zzz.log")
+	encoder := getEncoder()
 
-	core := zapcore.NewCore(
-		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
-		zapcore.AddSync(file),
-		zapcore.DebugLevel,
-	)
+	debugWriter := getWriter("storage/logs/debug.log")
+	infoWriter := getWriter("storage/logs/info.log")
+	errorWriter := getWriter("storage/logs/error.log")
 
-	lg := zap.New(core)
-
-	zap.ReplaceGlobals(lg)
-	return nil
-}
-
-func Test() error {
-	encoder := zapcore.NewConsoleEncoder(zapcore.EncoderConfig{
-		TimeKey:        "ts",
-		LevelKey:       "level",
-		CallerKey:      "file",
-		MessageKey:     "msg",
-		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.CapitalLevelEncoder,
-		EncodeTime:     zapcore.EpochTimeEncoder,
-		EncodeDuration: zapcore.SecondsDurationEncoder,
-		EncodeCaller:   zapcore.ShortCallerEncoder,
+	debugLever := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl == zapcore.DebugLevel
 	})
 
 	infoLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl >= zapcore.InfoLevel
+		return zapcore.DebugLevel < lvl && lvl < zapcore.ErrorLevel
 	})
 
 	errorLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
 		return lvl >= zapcore.ErrorLevel
 	})
 
-	infoWriter := getWriter("storage/logs/info.log")
-	errorWriter := getWriter("storage/logs/error.log")
-
 	core := zapcore.NewTee(
+		zapcore.NewCore(encoder, zapcore.AddSync(debugWriter), debugLever),
 		zapcore.NewCore(encoder, zapcore.AddSync(infoWriter), infoLevel),
 		zapcore.NewCore(encoder, zapcore.AddSync(errorWriter), errorLevel),
 	)
@@ -78,7 +61,27 @@ func Test() error {
 	return nil
 }
 
-func getWriter(path string) zapcore.WriteSyncer {
-	file, _ := os.Create(path)
-	return zapcore.AddSync(file)
+func getEncoder() zapcore.Encoder {
+	return zapcore.NewConsoleEncoder(zapcore.EncoderConfig{
+		TimeKey:        "",
+		LevelKey:       "level",
+		CallerKey:      "file",
+		MessageKey:     "msg",
+		LineEnding:     zapcore.DefaultLineEnding,
+		EncodeLevel:    zapcore.CapitalLevelEncoder,
+		EncodeTime:     zapcore.EpochTimeEncoder,
+		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeCaller:   zapcore.ShortCallerEncoder,
+	})
+}
+
+func getWriter(path string) io.Writer {
+	return &lumberjack.Logger{
+		Filename:   path,
+		MaxSize:    10,
+		MaxAge:     14,
+		MaxBackups: 5,
+		LocalTime:  true,
+		Compress:   false,
+	}
 }
