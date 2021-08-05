@@ -28,7 +28,6 @@ func SetApiRouter(r *gin.Engine) {
 		Use(middleware.Translations()).
 		Use(middleware.Tracing(database.DB))
 		// Use(middleware.LoggerWithZap()).
-		// Use(middleware.ContextTimeout(configs.App.DefaultContextTimeout, database.DB))
 	{
 		article := news_ctl.NewArticle()
 		apiV1.GET("/article/:id", article.Get)

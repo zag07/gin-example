@@ -15,7 +15,7 @@ func NewRouter() *gin.Engine {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// routes.SetApiRouter(r)
+	routes.SetApiRouter(r)
 
 	routes.SetWSRouter(r)
 
