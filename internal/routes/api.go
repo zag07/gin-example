@@ -26,7 +26,7 @@ func SetApiRouter(r *gin.Engine) {
 		// Use(middleware.JWT()).
 		Use(middleware.Translations()).
 		Use(middleware.Tracing()).
-		Use(middleware.Logger()).
+		// Use(middleware.LoggerWithZap()).
 		Use(middleware.ContextTimeout(configs.App.DefaultContextTimeout))
 	{
 		article := news_ctl.NewArticle()

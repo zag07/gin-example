@@ -1,3 +1,4 @@
+// Package middleware LoggerWithZap is from https://github.com/gin-contrib/zap/blob/master/zap.go
 package middleware
 
 import (
@@ -7,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func Logger() gin.HandlerFunc {
+func LoggerWithZap() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		logger := zap.L()
 		start := time.Now()

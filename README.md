@@ -43,10 +43,8 @@
     - Concurrency In Go
     - Go 语言编程之旅
 -
-- **Resources**
-    - [gin-contrib](https://github.com/gin-contrib)
--
 - **Projects**
+    - [gin-contrib](https://github.com/gin-contrib)
     - [blog-service](https://github.com/go-programming-tour-book/blog-service)
     - [chatroom](https://github.com/polaris1119/chatroom)
 -
@@ -61,7 +59,7 @@
 - [ ] jaeger
 - [ ] grpc
 - [x] websocket
-- [ ] log
+- [x] log
 - [ ] cli scaffold
 - [ ] graphql
 - [ ] Awesome project lists using Gin web framework.
