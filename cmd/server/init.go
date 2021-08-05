@@ -15,16 +15,16 @@ func init() {
 		log.Println("init.setConfig err: %v, %v", err, "将使用默认值")
 	}
 
+	if err := setTracer(); err != nil {
+		log.Fatalf("init.setTracer err: %v", err)
+	}
+
 	if err := setDatabase(); err != nil {
 		log.Fatalf("init.setDatabase err: %v", err)
 	}
 
 	if err := setLogger(); err != nil {
 		log.Fatalf("init.setLogger err: %v", err)
-	}
-
-	if err := setTracer(); err != nil {
-		log.Fatalf("init.setTracer err: %v", err)
 	}
 }
 

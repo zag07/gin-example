@@ -9,6 +9,7 @@ import (
 	"github.com/zs368/gin-example/internal/app/controllers/news_ctl"
 	"github.com/zs368/gin-example/internal/app/controllers/system_ctl"
 	"github.com/zs368/gin-example/internal/app/middleware"
+	"github.com/zs368/gin-example/pkg/database"
 )
 
 func SetApiRouter(r *gin.Engine) {
@@ -25,9 +26,9 @@ func SetApiRouter(r *gin.Engine) {
 	apiV1 := r.Group("/api/v1").
 		// Use(middleware.JWT()).
 		Use(middleware.Translations()).
-		Use(middleware.Tracing()).
+		Use(middleware.Tracing(database.DB))
 		// Use(middleware.LoggerWithZap()).
-		Use(middleware.ContextTimeout(configs.App.DefaultContextTimeout))
+		// Use(middleware.ContextTimeout(configs.App.DefaultContextTimeout, database.DB))
 	{
 		article := news_ctl.NewArticle()
 		apiV1.GET("/article/:id", article.Get)

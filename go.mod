@@ -25,5 +25,5 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.1.1
 	gorm.io/gorm v1.21.11
-	gorm.io/plugin/opentracing v0.0.0-20210506132430-24a9caea7709
+	gorm.io/plugin/opentracing v0.0.0-20210706093620-707e98269c0e
 )

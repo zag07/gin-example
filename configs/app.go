@@ -34,5 +34,5 @@ func SetAppConfig(c *config.Config) {
 
 	App.UploadImageAllowExts = c.GetStringSlice("UploadImageAllowExts", ".jpg,.jpeg,.png")
 
-	App.DefaultContextTimeout = c.GetDuration("DefaultContextTimeout", 60)
+	App.DefaultContextTimeout = c.GetDuration("DefaultContextTimeout", 60*time.Second)
 }

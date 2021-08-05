@@ -13,6 +13,7 @@
 ├── internal
 │   ├── app
 │   │   ├── controllers
+│   │   ├── middleware
 │   │   ├── models
 │   │   └── services
 │   ├── pkg
@@ -55,8 +56,8 @@
 ## TODO
 
 - [ ] jwt
-- [X] gorm
-- [ ] jaeger
+- [x] gorm
+- [x] jaeger
 - [ ] grpc
 - [x] websocket
 - [x] log

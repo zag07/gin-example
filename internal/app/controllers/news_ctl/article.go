@@ -8,6 +8,7 @@ import (
 	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
 	"github.com/zs368/gin-example/pkg/database"
+	"gorm.io/gorm"
 )
 
 type Article struct{}
@@ -36,7 +37,7 @@ func (a Article) Get(c *gin.Context) {
 	}
 
 	var (
-		db      = database.DB
+		db      = c.Request.Context().Value("DB").(*gorm.DB)
 		article models.Article
 		res     news_rule.ArticleGetResponse
 	)

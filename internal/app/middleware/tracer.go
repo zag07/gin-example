@@ -7,9 +7,10 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/uber/jaeger-client-go"
+	"gorm.io/gorm"
 )
 
-func Tracing() gin.HandlerFunc {
+func Tracing(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var (
 			newCtx context.Context
@@ -49,7 +50,10 @@ func Tracing() gin.HandlerFunc {
 		}
 		ctx.Set("X-Trace-ID", traceID)
 		ctx.Set("X-Span-ID", spanID)
-		ctx.Request = ctx.Request.WithContext(newCtx)
+
+		ctxWithDB := context.WithValue(ctx, "DB", db.WithContext(newCtx))
+		ctx.Request = ctx.Request.WithContext(ctxWithDB)
+
 		ctx.Next()
 	}
 }
