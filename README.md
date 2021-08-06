@@ -55,13 +55,13 @@
 
 ## TODO
 
-- [ ] jwt
+- [ ] auth-jwt
 - [x] gorm
 - [x] jaeger
 - [ ] grpc
 - [x] websocket
 - [x] log
-- [ ] cli scaffold
+- [ ] nsq
 - [ ] graphql
 - [ ] Awesome project lists using Gin web framework.
     - [ ] [gorush](https://github.com/appleboy/gorush): A push notification server written in Go.
