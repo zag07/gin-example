@@ -10,6 +10,7 @@ app:
         - .jpg
         - .jpeg
         - .png
+#    有坑，这儿 kratos 做了包装可以将 10s 解析为 time.Duration  好烦 0.0
     defaultContextTimeout:
     traceName: gin-example
     tracePort: 127.0.0.1:6831
