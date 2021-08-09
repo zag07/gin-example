@@ -11,12 +11,31 @@ import (
 	"time"
 
 	"github.com/zs368/gin-example/configs"
+	"github.com/zs368/gin-example/pkg/config"
 	"github.com/zs368/gin-example/pkg/routing"
 )
 
 // @title gin-example
 // @version 0.0.1
 func main() {
+	c, err := config.NewConfig("./configs/yaml/config.yaml")
+	if err != nil {
+		panic(err)
+	}
+
+	// 临时之举
+	err = c.ScanKey("app", &configs.App)
+	err = c.ScanKey("auth", &configs.Auth)
+	err = c.ScanKey("mysql", &configs.MySQL)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = initApp()
+	if err != nil {
+		panic(err)
+	}
+
 	srv := &http.Server{
 		Addr:    ":" + configs.App.Port,
 		Handler: routing.NewRouter(),

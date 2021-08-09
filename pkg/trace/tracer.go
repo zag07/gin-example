@@ -6,10 +6,11 @@ import (
 
 	"github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
+	"github.com/zs368/gin-example/configs"
 )
 
 // FIXME 这儿是放在初始化好，还是中间件好？？？
-func InitGlobalTracer(serviceName, agentHostPort string) (io.Closer, error) {
+func InitGlobalTracer() (io.Closer, error) {
 	cfg := &jaegercfg.Configuration{
 		Sampler: &jaegercfg.SamplerConfig{
 			Type:  jaeger.SamplerTypeConst,
@@ -18,13 +19,13 @@ func InitGlobalTracer(serviceName, agentHostPort string) (io.Closer, error) {
 		Reporter: &jaegercfg.ReporterConfig{
 			LogSpans:            true,
 			BufferFlushInterval: 1 * time.Second,
-			LocalAgentHostPort:  agentHostPort,
+			LocalAgentHostPort:  configs.App.TracePort,
 		},
 	}
 
-	closer, err := cfg.InitGlobalTracer(serviceName)
+	closer, err := cfg.InitGlobalTracer(configs.App.TraceName)
 	if err != nil {
-		return nil, err
+		return closer, err
 	}
 	// defer closer.Close()
 

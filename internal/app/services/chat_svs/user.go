@@ -14,10 +14,10 @@ import (
 )
 
 var (
-	writeWait      = configs.WS.WriteWait
-	pongWait       = configs.WS.PongWait
+	writeWait      = configs.App.WsWriteWait.AsDuration()
+	pongWait       = configs.App.WsPongWait.AsDuration()
 	pingPeriod     = (pongWait * 9) / 10
-	maxMessageSize = configs.WS.MaxMessageSize
+	maxMessageSize = configs.App.WsMaxMessageSize
 	newline        = []byte{'\n'}
 	space          = []byte{' '}
 

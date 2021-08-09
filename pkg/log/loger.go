@@ -9,7 +9,7 @@ import (
 )
 
 // InitLogger 将日志写入本地文件
-func InitLogger() error {
+func InitLogger() (*zap.Logger, error) {
 	logger, err := zap.Config{
 		Level:       zap.NewAtomicLevelAt(zap.InfoLevel),
 		Development: false,
@@ -23,15 +23,15 @@ func InitLogger() error {
 		ErrorOutputPaths: []string{"storage/logs/log.log"},
 	}.Build()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	zap.ReplaceGlobals(logger)
-	return nil
+	return logger, nil
 }
 
 // CustomLogger 按级别切割文件、按大小切割文件
-func CustomLogger() error {
+func CustomLogger() (*zap.Logger, error) {
 	encoder := getEncoder()
 
 	debugWriter := getWriter("storage/logs/debug.log")
@@ -58,7 +58,7 @@ func CustomLogger() error {
 
 	log := zap.New(core, zap.AddCaller())
 	zap.ReplaceGlobals(log)
-	return nil
+	return log, nil
 }
 
 func getEncoder() zapcore.Encoder {

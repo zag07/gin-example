@@ -18,10 +18,10 @@ func GetPage(ctx *gin.Context) int {
 func GetPageSize(ctx *gin.Context) int {
 	pageSize := cast.ToInt(ctx.Query("limit"))
 	if pageSize <= 0 {
-		return configs.App.DefaultPageSize
+		return int(configs.App.DefaultPageSize)
 	}
-	if pageSize > configs.App.MaxPageSize {
-		return configs.App.MaxPageSize
+	if pageSize > int(configs.App.MaxPageSize) {
+		return int(configs.App.MaxPageSize)
 	}
 
 	return pageSize

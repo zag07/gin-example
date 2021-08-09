@@ -11,16 +11,17 @@ import (
 
 var DB *gorm.DB
 
-func NewDB() (*gorm.DB, error) {
+func SetDB() (*gorm.DB, error) {
+	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t&loc=%s",
-		configs.Db.MySQL.UserName,
-		configs.Db.MySQL.Password,
-		configs.Db.MySQL.Host+":"+configs.Db.MySQL.Port,
-		configs.Db.MySQL.DBName,
-		configs.Db.MySQL.Charset,
+		configs.MySQL.Username,
+		configs.MySQL.Password,
+		configs.MySQL.Host+":"+configs.MySQL.Port,
+		configs.MySQL.DbName,
+		configs.MySQL.Charset,
 		true,
 		"Local")
-	db, err := gorm.Open(mysql.New(mysql.Config{
+	DB, err = gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,   // DSN data source name
 		DefaultStringSize:         256,   // string 类型字段的默认长度
 		DisableDatetimePrecision:  true,  // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
@@ -31,9 +32,9 @@ func NewDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = db.Use(gormOpentracing.New()); err != nil {
+	if err = DB.Use(gormOpentracing.New()); err != nil {
 		return nil, err
 	}
 
-	return db, err
+	return DB, err
 }

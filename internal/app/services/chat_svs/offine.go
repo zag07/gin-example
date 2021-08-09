@@ -11,7 +11,7 @@ type offlineProcessor struct {
 	recentRing *ring.Ring
 }
 
-var n = configs.WS.OfflineNum
+var n = int(configs.App.WsOfflineNum)
 
 var OfflineProcessor = &offlineProcessor{
 	n:          n,

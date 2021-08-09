@@ -54,7 +54,7 @@ func CheckContainExt(t FileType, name string) bool {
 
 func CheckFileSize(t FileType, f multipart.File) bool {
 	content, _ := ioutil.ReadAll(f)
-	size := len(content)
+	size := int32(len(content))
 	switch t {
 	case TypeImage:
 		if size <= configs.App.UploadImageMaxSize<<20 {

@@ -19,7 +19,7 @@ var Broadcaster = &broadcaster{
 	entering: make(chan *User),
 	leaving:  make(chan *User),
 	send:     make(chan []byte),
-	messages: make(chan *Message, configs.WS.MessageQueue),
+	messages: make(chan *Message, configs.App.WsMessageQueue),
 }
 
 func (b *broadcaster) Run() {
@@ -60,7 +60,7 @@ func (b *broadcaster) Run() {
 }
 
 func (b *broadcaster) Broadcast(msg *Message) {
-	if len(b.messages) >= configs.WS.MessageQueue {
+	if len(b.messages) >= int(configs.App.WsMessageQueue) {
 		log.Println("broadcast queue 满了")
 	}
 	b.messages <- msg
