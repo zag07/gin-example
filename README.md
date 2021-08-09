@@ -1,5 +1,11 @@
 # Gin Example
 
+
+
+**分成两个分支，test试用一些好玩的包，master比较正常**
+
+
+
 ## Directory Structure
 
 ```text
@@ -31,28 +37,6 @@
 ├── ...
 ```
 
-## Recommended
-
-- [The Go Blog](https://blog.golang.org/index)
-- [The Go Doc](https://golang.org/doc/)
-- [The Go Wiki](https://github.com/golang/go/wiki)
-- [The Go Pkg](https://pkg.go.dev/)
--
-- **Books**
-    - The Go Programming Language
-    - Go in Action
-    - Concurrency In Go
-    - Go 语言编程之旅
--
-- **Projects**
-    - [gin-contrib](https://github.com/gin-contrib)
-    - [blog-service](https://github.com/go-programming-tour-book/blog-service)
-    - [chatroom](https://github.com/polaris1119/chatroom)
--
-- **Blogs**
-    - [Why Golang Nil Is Not Always Nil? Nil Explained](https://codefibershq.com/blog/golang-why-nil-is-not-always-nil)
--
-
 ## TODO
 
 - [ ] auth-jwt
@@ -72,3 +56,25 @@
     - [ ] [picfit](https://github.com/thoas/picfit): An image resizing server written in Go.
     - [ ] [brigade](https://github.com/brigadecore/brigade): Event-based Scripting for Kubernetes.
     - [ ] [dkron](https://github.com/distribworks/dkron): Distributed, fault tolerant job scheduling system.
+
+## Recommended
+
+- [The Go Blog](https://blog.golang.org/index)
+- [The Go Doc](https://golang.org/doc/)
+- [The Go Wiki](https://github.com/golang/go/wiki)
+- [The Go Pkg](https://pkg.go.dev/)
+-
+- **Books**
+    - The Go Programming Language
+    - Go in Action
+    - Concurrency In Go
+    - Go 语言编程之旅
+    -
+- **Projects**
+    - [gin-contrib](https://github.com/gin-contrib)
+    - [blog-service](https://github.com/go-programming-tour-book/blog-service)
+    - [chatroom](https://github.com/polaris1119/chatroom)
+    -
+- **Blogs**
+    - [Why Golang Nil Is Not Always Nil? Nil Explained](https://codefibershq.com/blog/golang-why-nil-is-not-always-nil)
+    -
