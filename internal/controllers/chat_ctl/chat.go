@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zs368/gin-example/internal/app/services/chat_svs"
 	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
+	"github.com/zs368/gin-example/internal/services/chat_svs"
 )
 
 type Chat struct{}

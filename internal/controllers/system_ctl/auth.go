@@ -2,10 +2,10 @@ package system_ctl
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/zs368/gin-example/internal/app/models"
-	"github.com/zs368/gin-example/internal/app/rules/system_rule"
+	"github.com/zs368/gin-example/internal/models"
 	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
+	"github.com/zs368/gin-example/internal/rules/system_rule"
 	"github.com/zs368/gin-example/pkg/database"
 )
 

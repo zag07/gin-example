@@ -8,3 +8,7 @@ config:
 	protoc --proto_path=. \
 			   --go_out=paths=source_relative:. \
 			   $(CONFIGS_PROTO_FILES)
+
+.PHONY: wire
+wire:
+	wire ./cmd/example/...

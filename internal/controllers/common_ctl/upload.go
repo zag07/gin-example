@@ -3,11 +3,11 @@ package common_ctl
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
-	"github.com/zs368/gin-example/internal/app/rules/common_rule"
-	"github.com/zs368/gin-example/internal/app/services/common_svs"
 	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
 	"github.com/zs368/gin-example/internal/pkg/upload"
+	"github.com/zs368/gin-example/internal/rules/common_rule"
+	"github.com/zs368/gin-example/internal/services/common_svs"
 )
 
 type Upload struct{}

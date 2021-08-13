@@ -2,8 +2,8 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/zs368/gin-example/internal/app/controllers/chat_ctl"
-	"github.com/zs368/gin-example/internal/app/services/chat_svs"
+	"github.com/zs368/gin-example/internal/controllers/chat_ctl"
+	"github.com/zs368/gin-example/internal/services/chat_svs"
 )
 
 func SetWSRouter(r *gin.Engine) {

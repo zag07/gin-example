@@ -4,10 +4,10 @@ package test
 
 import (
 	"fmt"
+	"github.com/zs368/gin-example/internal/models"
 	"log"
 	"testing"
 
-	"github.com/zs368/gin-example/internal/app/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

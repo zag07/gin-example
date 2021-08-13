@@ -1,4 +1,4 @@
-package gin_example
+package pkg
 
 import (
 	"io"

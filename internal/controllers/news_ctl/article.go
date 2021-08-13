@@ -3,10 +3,10 @@ package news_ctl
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
-	"github.com/zs368/gin-example/internal/app/models"
-	"github.com/zs368/gin-example/internal/app/rules/news_rule"
+	"github.com/zs368/gin-example/internal/models"
 	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
+	"github.com/zs368/gin-example/internal/rules/news_rule"
 	"github.com/zs368/gin-example/pkg/database"
 	"gorm.io/gorm"
 )
