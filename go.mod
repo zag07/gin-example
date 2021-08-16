@@ -10,6 +10,8 @@ require (
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.8.0
+	github.com/go-redis/redis/v8 v8.11.3
+	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/google/wire v0.5.0
 	github.com/gorilla/websocket v1.4.2

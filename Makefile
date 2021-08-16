@@ -1,6 +1,6 @@
 GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always)
-CONFIGS_PROTO_FILES=$(shell find configs -name *.proto)
+CONFIGS_PROTO_FILES=$(shell find internal/conf -name *.proto)
 
 .PHONY: config
 # generate internal proto
