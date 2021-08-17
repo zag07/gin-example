@@ -41,5 +41,6 @@ func SetApiRouter(r *gin.Engine) {
 		apiV1.PUT("/tag/:id", tag.Update)
 		apiV1.DELETE("/tag/:id", tag.Delete)
 
+		// blog := service.NewBlogService()
 	}
 }
