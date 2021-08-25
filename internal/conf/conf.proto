@@ -6,24 +6,30 @@ option go_package = "gin_example/internal/conf;conf";
 import "google/protobuf/duration.proto";
 
 message Bootstrap {
-  Trace  trace = 1;
-  Server server = 2;
-  Data data = 3;
+  App app = 1;
+  Data data = 2;
 }
 
-message Server {
-  message HTTP {
-    string network = 1;
-    string addr = 2;
-    google.protobuf.Duration timeout = 3;
-  }
-  message GRPC {
-    string network = 1;
-    string addr = 2;
-    google.protobuf.Duration timeout = 3;
-  }
-  HTTP http = 1;
-  GRPC grpc = 2;
+message App {
+  string                   name = 1;
+  string                   port = 2;
+  google.protobuf.Duration timeout = 3;
+  int32                    pageSize = 4;
+  int32                    maxPageSize = 5;
+  string                   uploadSavePath = 6;
+  string                   uploadServerUrl = 7;
+  int32                    uploadImageMaxSize = 8;
+  repeated string          uploadImageAllowExts = 9;
+  string                   traceName = 10;
+  string                   tracePort = 11;
+  google.protobuf.Duration wsWriteWait = 12;
+  google.protobuf.Duration wsPongWait = 13;
+  int64                    wsMaxMessageSize = 14;
+  int32                    wsMessageQueue = 15;
+  int32                    wsOfflineNum = 16;
+  string                   jwtSecret = 17;
+  string                   jwtIssuer = 18;
+  google.protobuf.Duration jwtExpire = 19;
 }
 
 message Data {
@@ -42,8 +48,4 @@ message Data {
   }
   Database database = 1;
   Redis redis = 2;
-}
-
-message Trace {
-  string endpoint = 1;
 }

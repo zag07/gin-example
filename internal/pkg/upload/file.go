@@ -9,7 +9,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/zs368/gin-example/configs"
+	"github.com/zs368/gin-example/internal/conf"
 	"github.com/zs368/gin-example/internal/pkg/utils"
 )
 
@@ -42,7 +42,7 @@ func CheckContainExt(t FileType, name string) bool {
 	ext := strings.ToUpper(path.Ext(name))
 	switch t {
 	case TypeImage:
-		for _, allowExt := range configs.App.UploadImageAllowExts {
+		for _, allowExt := range conf.App.GetUploadImageAllowExts() {
 			if strings.ToUpper(allowExt) == ext {
 				return true
 			}

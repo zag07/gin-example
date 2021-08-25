@@ -4,9 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/zs368/gin-example/internal/conf"
-	"github.com/zs368/gin-example/internal/data/ent"
-
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-redis/redis/extra/redisotel"
@@ -18,6 +15,9 @@ import (
 	"go.uber.org/zap"
 	// init mysql driver
 	_ "github.com/go-sql-driver/mysql"
+
+	"github.com/zs368/gin-example/internal/conf"
+	"github.com/zs368/gin-example/internal/data/ent"
 )
 
 // ProviderSet is data providers.

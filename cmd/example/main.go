@@ -3,30 +3,37 @@ package main
 import (
 	"context"
 	"errors"
-	"log"
+	"flag"
+	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"github.com/zs368/gin-example/configs"
-	"github.com/zs368/gin-example/pkg/config"
+	"github.com/zs368/gin-example/pkg/log"
 	"github.com/zs368/gin-example/pkg/routing"
 )
 
+var (
+	// flagconf is the config flag.
+	flagconf string
+)
+
+func init() {
+	flag.StringVar(&flagconf, "conf", "./configs", "config path, eg: -conf config.yaml")
+}
+
 // @title gin-example
-// @version 0.0.1
+// @version 0.2.x
 func main() {
-	c, err := config.NewConfig("./configs/yaml/config.yaml")
+	flag.Parse()
+	logger, err := log.CustomLogger()
 	if err != nil {
 		panic(err)
 	}
 
-	// 临时之举
-	err = c.ScanKey("app", &configs.App)
-	err = c.ScanKey("auth", &configs.Auth)
-	err = c.ScanKey("mysql", &configs.MySQL)
+	logger.Info("test")
 	if err != nil {
 		panic(err)
 	}
@@ -37,27 +44,27 @@ func main() {
 	}
 
 	srv := &http.Server{
-		Addr:    ":" + configs.App.Port,
+		Addr:    "",
 		Handler: routing.NewRouter(),
 	}
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
-			log.Printf("listen: %s\n", err)
+			logger.Info("listen: %s\n", zap.Error(err))
 		}
 	}()
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	log.Println("Shutting down server...")
+	logger.Info("Shutting down server...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatal("Server forced to shutdown:", err)
+		os.Exit(1)
 	}
 
-	log.Println("Server exiting")
+	logger.Info("Server exiting")
 }
