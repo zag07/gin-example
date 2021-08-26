@@ -2,7 +2,6 @@ package common_svs
 
 import (
 	"errors"
-	"github.com/zs368/gin-example/configs"
 	"mime/multipart"
 	"os"
 
@@ -38,6 +37,6 @@ func UploadFile(fileType upload.FileType, file multipart.File, fileHeader *multi
 
 	return &FileInfo{
 		Name: fileName,
-		Url:  configs.App.UploadServerUrl + "/" + fileName,
+		Url:  "configs.App.UploadServerUrl" + "/" + fileName,
 	}, nil
 }

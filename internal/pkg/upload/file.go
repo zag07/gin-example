@@ -9,7 +9,6 @@ import (
 	"path"
 	"strings"
 
-	"github.com/zs368/gin-example/internal/conf"
 	"github.com/zs368/gin-example/internal/pkg/utils"
 )
 
@@ -25,7 +24,7 @@ func GetFileName(name string) string {
 }
 
 func GetSavePath() string {
-	return configs.App.UploadSavePath
+	return "configs.App.UploadSavePath"
 }
 
 func ISErrExist(dst string) bool {
@@ -42,7 +41,7 @@ func CheckContainExt(t FileType, name string) bool {
 	ext := strings.ToUpper(path.Ext(name))
 	switch t {
 	case TypeImage:
-		for _, allowExt := range conf.App.GetUploadImageAllowExts() {
+		for _, allowExt := range []string{"ads"} {
 			if strings.ToUpper(allowExt) == ext {
 				return true
 			}
@@ -57,7 +56,7 @@ func CheckFileSize(t FileType, f multipart.File) bool {
 	size := int32(len(content))
 	switch t {
 	case TypeImage:
-		if size <= configs.App.UploadImageMaxSize<<20 {
+		if size <= 5<<20 {
 			return true
 		}
 	}

@@ -6,7 +6,7 @@
 package main
 
 import (
-	"github.com/zs368/gin-example/pkg"
+	"github.com/zs368/gin-example"
 	"github.com/zs368/gin-example/pkg/database"
 	"github.com/zs368/gin-example/pkg/log"
 	"github.com/zs368/gin-example/pkg/trace"
@@ -14,7 +14,7 @@ import (
 
 // Injectors from wire.go:
 
-func initApp() (*pkg.App, error) {
+func initApp() (*gin_example.App, error) {
 	logger, err := log.CustomLogger()
 	if err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func initApp() (*pkg.App, error) {
 	if err != nil {
 		return nil, err
 	}
-	app := &pkg.App{
+	app := &gin_example.App{
 		Log:          logger,
 		TracerCloser: closer,
 		DB:           db,

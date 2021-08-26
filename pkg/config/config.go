@@ -61,10 +61,11 @@ func LoadFromContent(content string) (*conf.Bootstrap, error) {
 // DefaultConfig returns a default config instance
 func DefaultConfig() *conf.Bootstrap {
 	return &conf.Bootstrap{
-		App: &conf.App{
+		Http: &conf.HTTP{
 			Name:                 "gin-example",
 			Port:                 ":8080",
 			Timeout:              &durationpb.Duration{Seconds: 1},
+			Debug:                false,
 			PageSize:             25,
 			MaxPageSize:          100,
 			UploadSavePath:       "storage/app/uploads",

@@ -6,30 +6,31 @@ option go_package = "gin_example/internal/conf;conf";
 import "google/protobuf/duration.proto";
 
 message Bootstrap {
-  App app = 1;
+  HTTP http = 1;
   Data data = 2;
 }
 
-message App {
+message HTTP {
   string                   name = 1;
   string                   port = 2;
   google.protobuf.Duration timeout = 3;
-  int32                    pageSize = 4;
-  int32                    maxPageSize = 5;
-  string                   uploadSavePath = 6;
-  string                   uploadServerUrl = 7;
-  int32                    uploadImageMaxSize = 8;
-  repeated string          uploadImageAllowExts = 9;
-  string                   traceName = 10;
-  string                   tracePort = 11;
-  google.protobuf.Duration wsWriteWait = 12;
-  google.protobuf.Duration wsPongWait = 13;
-  int64                    wsMaxMessageSize = 14;
-  int32                    wsMessageQueue = 15;
-  int32                    wsOfflineNum = 16;
-  string                   jwtSecret = 17;
-  string                   jwtIssuer = 18;
-  google.protobuf.Duration jwtExpire = 19;
+  bool                     debug = 4;
+  int32                    pageSize = 5;
+  int32                    maxPageSize = 6;
+  string                   uploadSavePath = 7;
+  string                   uploadServerUrl = 8;
+  int32                    uploadImageMaxSize = 9;
+  repeated string          uploadImageAllowExts = 10;
+  string                   traceName = 11;
+  string                   tracePort = 12;
+  google.protobuf.Duration wsWriteWait = 13;
+  google.protobuf.Duration wsPongWait = 14;
+  int64                    wsMaxMessageSize = 15;
+  int32                    wsMessageQueue = 16;
+  int32                    wsOfflineNum = 17;
+  string                   jwtSecret = 18;
+  string                   jwtIssuer = 19;
+  google.protobuf.Duration jwtExpire = 20;
 }
 
 message Data {

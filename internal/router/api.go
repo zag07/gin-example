@@ -1,14 +1,16 @@
-package routes
+package router
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zs368/gin-example/configs"
+
+	"github.com/zs368/gin-example/internal/controllers/chat_ctl"
 	"github.com/zs368/gin-example/internal/controllers/common_ctl"
 	"github.com/zs368/gin-example/internal/controllers/news_ctl"
 	"github.com/zs368/gin-example/internal/controllers/system_ctl"
-	"github.com/zs368/gin-example/internal/middleware"
+	"github.com/zs368/gin-example/internal/router/middleware"
+	"github.com/zs368/gin-example/internal/services/chat_svs"
 	"github.com/zs368/gin-example/pkg/database"
 )
 
@@ -20,7 +22,7 @@ func SetApiRouter(r *gin.Engine) {
 	{
 		upload := common_ctl.NewUpload()
 		c.POST("/upload/file", upload.UploadFile)
-		c.StaticFS("/static", http.Dir(configs.App.UploadSavePath))
+		c.StaticFS("/static", http.Dir(""))
 	}
 
 	apiV1 := r.Group("/api/v1").
@@ -42,5 +44,18 @@ func SetApiRouter(r *gin.Engine) {
 		apiV1.DELETE("/tag/:id", tag.Delete)
 
 		// blog := service.NewBlogService()
+	}
+}
+
+func SetWSRouter(r *gin.Engine) {
+	go chat_svs.Broadcaster.Run()
+
+	c := r.Group("/chat")
+	{
+		chat := chat_ctl.NewChat()
+		c.GET("/", chat.Home)
+		c.GET("/2", chat.Home2)
+		c.GET("/user_list", chat.UserList)
+		c.GET("/ws", chat.WS)
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"flag"
+	"github.com/zs368/gin-example/internal/router"
 	"go.uber.org/zap"
 	"net/http"
 	"os"
@@ -12,7 +13,6 @@ import (
 	"time"
 
 	"github.com/zs368/gin-example/pkg/log"
-	"github.com/zs368/gin-example/pkg/routing"
 )
 
 var (
@@ -43,16 +43,7 @@ func main() {
 		panic(err)
 	}
 
-	srv := &http.Server{
-		Addr:    "",
-		Handler: routing.NewRouter(),
-	}
 
-	go func() {
-		if err := srv.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
-			logger.Info("listen: %s\n", zap.Error(err))
-		}
-	}()
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
