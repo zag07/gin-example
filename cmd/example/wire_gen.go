@@ -7,30 +7,16 @@ package main
 
 import (
 	"github.com/zs368/gin-example"
-	"github.com/zs368/gin-example/pkg/database"
-	"github.com/zs368/gin-example/pkg/log"
-	"github.com/zs368/gin-example/pkg/trace"
+	"github.com/zs368/gin-example/internal/conf"
+	"github.com/zs368/gin-example/internal/server"
+	"go.uber.org/zap"
 )
 
 // Injectors from wire.go:
 
-func initApp() (*gin_example.App, error) {
-	logger, err := log.CustomLogger()
-	if err != nil {
-		return nil, err
-	}
-	closer, err := trace.InitGlobalTracer()
-	if err != nil {
-		return nil, err
-	}
-	db, err := database.SetDB()
-	if err != nil {
-		return nil, err
-	}
-	app := &gin_example.App{
-		Log:          logger,
-		TracerCloser: closer,
-		DB:           db,
-	}
-	return app, nil
+func initApp(http *conf.HTTP, data *conf.Data, logger *zap.Logger) (*example.App, func(), error) {
+	httpServer := server.NewHTTPServer(http, logger)
+	app := newApp(logger, httpServer)
+	return app, func() {
+	}, nil
 }

@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/zs368/gin-example/internal/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,7 @@ func SetApiRouter(r *gin.Engine) {
 		Use(middleware.Tracing(database.DB))
 	// Use(middleware.LoggerWithZap()).
 	{
+		apiV1.GET("/article/:id", e.GetArticle)
 		article := news_ctl.NewArticle()
 		apiV1.GET("/article/:id", article.Get)
 		apiV1.POST("/article", article.Create)

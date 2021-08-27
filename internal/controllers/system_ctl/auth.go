@@ -5,7 +5,7 @@ import (
 	"github.com/zs368/gin-example/internal/models"
 	"github.com/zs368/gin-example/internal/pkg/app"
 	"github.com/zs368/gin-example/internal/pkg/errcode"
-	"github.com/zs368/gin-example/internal/rules/system_rule"
+	"github.com/zs368/gin-example/internal/rule/system_rule"
 	"github.com/zs368/gin-example/pkg/database"
 )
 

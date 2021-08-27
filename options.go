@@ -2,12 +2,11 @@ package example
 
 import (
 	"context"
+	"github.com/zs368/gin-example/pkg/transport"
 	"net/url"
 	"os"
 
 	"go.uber.org/zap"
-
-	"github.com/zs368/gin-example/internal/server"
 )
 
 // Option is an application option.
@@ -25,7 +24,7 @@ type options struct {
 	sigs []os.Signal
 
 	logger  *zap.Logger
-	servers []server.Server
+	servers []transport.Server
 }
 
 // ID with service id.
@@ -66,7 +65,7 @@ func Logger(logger *zap.Logger) Option {
 }
 
 // Server with transport servers.
-func Server(srv ...server.Server) Option {
+func Server(srv ...transport.Server) Option {
 	return func(o *options) { o.servers = srv }
 }
 

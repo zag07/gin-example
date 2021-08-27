@@ -2,13 +2,13 @@ package example
 
 import (
 	"context"
+	"errors"
+	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
-
-	"go.uber.org/zap"
 )
 
 type App struct {
@@ -20,7 +20,7 @@ type App struct {
 func New(opts ...Option) *App {
 	options := options{
 		ctx:    context.Background(),
-		logger: zap.L(),
+		logger: zap.NewExample(),
 		sigs:   []os.Signal{syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT},
 	}
 
@@ -32,6 +32,7 @@ func New(opts ...Option) *App {
 	}
 }
 
+// Run executes all OnStart hooks registered with the application's Lifecycle.
 func (a *App) Run() error {
 	eg, ctx := errgroup.WithContext(a.ctx)
 	wg := sync.WaitGroup{}
@@ -49,11 +50,31 @@ func (a *App) Run() error {
 	}
 	wg.Wait()
 
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, a.opts.sigs...)
-
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, a.opts.sigs...)
+	eg.Go(func() error {
+		for {
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case <-quit:
+				err := a.Stop()
+				if err != nil {
+					a.opts.logger.Sugar().Errorf("failed to app stop: %v", err)
+				}
+			}
+		}
+	})
+	if err := eg.Wait(); err != nil && !errors.Is(err, context.Canceled) {
+		return err
+	}
+	return nil
 }
 
+// Stop gracefully stops the application.
 func (a *App) Stop() error {
-
+	if a.cancel != nil {
+		a.cancel()
+	}
+	return nil
 }

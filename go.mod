@@ -1,6 +1,6 @@
 module github.com/zs368/gin-example
 
-go 1.16
+go 1.17
 
 require (
 	entgo.io/ent v0.9.0
@@ -8,6 +8,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/bufbuild/buf v0.37.0 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
+	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect

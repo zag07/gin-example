@@ -1,12 +1,6 @@
 package server
 
-import "context"
+import "github.com/google/wire"
 
 // ProviderSet is server providers.
-// var ProviderSet = wire.NewSet(NewHTTPServer, NewGRPCServer)
-
-// Server is transport server.
-type Server interface {
-	Start(context.Context) error
-	Stop(context.Context) error
-}
+var ProviderSet = wire.NewSet(NewHTTPServer)

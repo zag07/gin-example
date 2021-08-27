@@ -8,20 +8,20 @@ import (
 	"go.uber.org/zap"
 )
 
-type articleRepo struct {
+type blogRepo struct {
 	data *Data
 	log  *zap.Logger
 }
 
 // NewArticleRepo .
 func NewArticleRepo(data *Data, logger zap.Logger) biz.ArticleRepo {
-	return &articleRepo{
+	return &blogRepo{
 		data: data,
 		log:  &logger,
 	}
 }
 
-func (ar *articleRepo) ListArticle(ctx context.Context) ([]*biz.Article, error) {
+func (ar *blogRepo) ListArticle(ctx context.Context) ([]*biz.Article, error) {
 	ps, err := ar.data.db.Article.Query().All(ctx)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (ar *articleRepo) ListArticle(ctx context.Context) ([]*biz.Article, error) 
 	return rv, nil
 }
 
-func (ar *articleRepo) GetArticle(ctx context.Context, id int64) (*biz.Article, error) {
+func (ar *blogRepo) GetArticle(ctx context.Context, id int64) (*biz.Article, error) {
 	p, err := ar.data.db.Article.Get(ctx, id)
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (ar *articleRepo) GetArticle(ctx context.Context, id int64) (*biz.Article, 
 	}, nil
 }
 
-func (ar *articleRepo) CreateArticle(ctx context.Context, article *biz.Article) error {
+func (ar *blogRepo) CreateArticle(ctx context.Context, article *biz.Article) error {
 	_, err := ar.data.db.Article.
 		Create().
 		SetTitle(article.Title).
@@ -62,7 +62,7 @@ func (ar *articleRepo) CreateArticle(ctx context.Context, article *biz.Article) 
 	return err
 }
 
-func (ar *articleRepo) UpdateArticle(ctx context.Context, id int64, article *biz.Article) error {
+func (ar *blogRepo) UpdateArticle(ctx context.Context, id int64, article *biz.Article) error {
 	p, err := ar.data.db.Article.Get(ctx, id)
 	if err != nil {
 		return err
@@ -75,6 +75,6 @@ func (ar *articleRepo) UpdateArticle(ctx context.Context, id int64, article *biz
 	return err
 }
 
-func (ar *articleRepo) DeleteArticle(ctx context.Context, id int64) error {
+func (ar *blogRepo) DeleteArticle(ctx context.Context, id int64) error {
 	return ar.data.db.Article.DeleteOneID(id).Exec(ctx)
 }
