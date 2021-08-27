@@ -9,39 +9,55 @@ import (
 	"path"
 	"strings"
 
+	"github.com/zs368/gin-example/internal/conf"
 	"github.com/zs368/gin-example/internal/pkg/utils"
 )
+
+type File struct {
+	cfg *conf.HTTP
+}
+
+func NewFile(cfg *conf.HTTP) *File {
+	return &File{cfg: cfg}
+}
+
+func (f *File) Cfg() *conf.HTTP {
+	return f.cfg
+}
 
 type FileType int
 
 const TypeImage FileType = iota + 1
 
-func GetFileName(name string) string {
+func (f *File) GetFileName(name string) string {
 	ext := path.Ext(name)
 	fileName := utils.EncodeMD5(strings.TrimSuffix(name, ext))
 
 	return fileName + ext
 }
 
-func GetSavePath() string {
-	return "configs.App.UploadSavePath"
+func (f *File) GetSavePath() string {
+	if f.cfg.UploadSavePath != "" {
+		return f.cfg.UploadSavePath
+	}
+	return "storage/app/uploads"
 }
 
-func ISErrExist(dst string) bool {
+func (f *File) ISErrExist(dst string) bool {
 	_, err := os.Stat(dst)
 	return errors.Is(err, os.ErrExist)
 }
 
-func IsErrPermission(dst string) bool {
+func (f *File) IsErrPermission(dst string) bool {
 	_, err := os.Stat(dst)
 	return errors.Is(err, os.ErrPermission)
 }
 
-func CheckContainExt(t FileType, name string) bool {
+func (f *File) CheckContainExt(t FileType, name string) bool {
 	ext := strings.ToUpper(path.Ext(name))
 	switch t {
 	case TypeImage:
-		for _, allowExt := range []string{"ads"} {
+		for _, allowExt := range f.cfg.UploadImageAllowExts {
 			if strings.ToUpper(allowExt) == ext {
 				return true
 			}
@@ -51,12 +67,12 @@ func CheckContainExt(t FileType, name string) bool {
 	return false
 }
 
-func CheckFileSize(t FileType, f multipart.File) bool {
-	content, _ := ioutil.ReadAll(f)
+func (f *File) CheckFileSize(t FileType, file multipart.File) bool {
+	content, _ := ioutil.ReadAll(file)
 	size := int32(len(content))
 	switch t {
 	case TypeImage:
-		if size <= 5<<20 {
+		if size <= f.cfg.UploadImageMaxSize<<20 {
 			return true
 		}
 	}
@@ -64,7 +80,7 @@ func CheckFileSize(t FileType, f multipart.File) bool {
 	return false
 }
 
-func CreateSavePath(path string, perm os.FileMode) error {
+func (f *File) CreateSavePath(path string, perm os.FileMode) error {
 	if err := os.MkdirAll(path, perm); err != nil {
 		return err
 	}
@@ -72,7 +88,7 @@ func CreateSavePath(path string, perm os.FileMode) error {
 	return nil
 }
 
-func SaveFile(file *multipart.FileHeader, path string) error {
+func (f *File) SaveFile(file *multipart.FileHeader, path string) error {
 	src, err := file.Open()
 	if err != nil {
 		return err

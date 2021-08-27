@@ -21,7 +21,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewArticleRepo)
+var ProviderSet = wire.NewSet(NewData, NewBlogRepo)
 
 // Data .
 type Data struct {
@@ -29,7 +29,7 @@ type Data struct {
 	rdb *redis.Client
 }
 
-func NewData(conf *conf.Data, log zap.Logger) (*Data, func(), error) {
+func NewData(conf *conf.Data, log *zap.Logger) (*Data, func(), error) {
 	// log := log.NewHelper(logger)
 	drv, err := sql.Open(
 		conf.Database.Driver,

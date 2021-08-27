@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/zs368/gin-example/configs"
 )
 
 // TODO 后面改掉 不能存敏感信息到 token 中
@@ -21,7 +20,7 @@ type Claims struct {
 }
 
 func GetJWTSecret() []byte {
-	return []byte(configs.Auth.JwtSecret)
+	return []byte("")
 }
 
 func GenerateToken(user UserInfo) (string, error) {
@@ -29,8 +28,8 @@ func GenerateToken(user UserInfo) (string, error) {
 
 	t.Claims = &Claims{
 		&jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(configs.Auth.JwtExpire.AsDuration()).Unix(),
-			Issuer:    configs.Auth.JwtIssuer,
+			ExpiresAt: time.Now().Add(7200).Unix(),
+			Issuer:    "",
 		},
 		user,
 	}

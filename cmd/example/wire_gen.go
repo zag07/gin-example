@@ -7,16 +7,28 @@ package main
 
 import (
 	"github.com/zs368/gin-example"
+	"github.com/zs368/gin-example/internal/biz"
 	"github.com/zs368/gin-example/internal/conf"
+	"github.com/zs368/gin-example/internal/data"
 	"github.com/zs368/gin-example/internal/server"
+	"github.com/zs368/gin-example/internal/service"
 	"go.uber.org/zap"
 )
 
 // Injectors from wire.go:
 
-func initApp(http *conf.HTTP, data *conf.Data, logger *zap.Logger) (*example.App, func(), error) {
-	httpServer := server.NewHTTPServer(http, logger)
+// initApp init example application.
+func initApp(http *conf.HTTP, confData *conf.Data, logger *zap.Logger) (*example.App, func(), error) {
+	dataData, cleanup, err := data.NewData(confData, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	blogRepo := data.NewBlogRepo(dataData, logger)
+	blogUseCase := biz.NewBlogUseCase(blogRepo, http, logger)
+	exampleService := service.NewBlogService(blogUseCase, logger)
+	httpServer := server.NewHTTPServer(http, logger, exampleService)
 	app := newApp(logger, httpServer)
 	return app, func() {
+		cleanup()
 	}, nil
 }

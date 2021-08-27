@@ -1,17 +1,13 @@
 package chat_svs
 
-import (
-	"container/ring"
-
-	"github.com/zs368/gin-example/configs"
-)
+import "container/ring"
 
 type offlineProcessor struct {
 	n          int
 	recentRing *ring.Ring
 }
 
-var n = int(configs.App.WsOfflineNum)
+var n = 10
 
 var OfflineProcessor = &offlineProcessor{
 	n:          n,

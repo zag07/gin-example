@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"github.com/zs368/gin-example/pkg/config"
+	"github.com/zs368/gin-example/pkg/log"
 	"github.com/zs368/gin-example/pkg/transport/http"
 	"go.uber.org/zap"
 
@@ -26,7 +28,7 @@ func newApp(logger *zap.Logger, hs *http.Server) *example.App {
 
 // @title gin-example
 // @version 0.2.x
-/*func main() {
+func main() {
 	flag.Parse()
 	logger, err := log.CustomLogger()
 	if err != nil {
@@ -38,7 +40,14 @@ func newApp(logger *zap.Logger, hs *http.Server) *example.App {
 		panic(err)
 	}
 
-	app, cleanup, err := initApp()
+	app, cleanup, err := initApp(cfg.Http, cfg.Data, logger)
+	if err != nil {
+		panic(err)
+	}
+	defer cleanup()
 
+	// start and wait for stop signal
+	if err := app.Run(); err != nil {
+		panic(err)
+	}
 }
-*/

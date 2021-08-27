@@ -9,17 +9,16 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/zs368/gin-example/configs"
 	"github.com/zs368/gin-example/internal/pkg/app"
 )
 
 var (
-	writeWait      = configs.App.WsWriteWait.AsDuration()
-	pongWait       = configs.App.WsPongWait.AsDuration()
-	pingPeriod     = (pongWait * 9) / 10
-	maxMessageSize = configs.App.WsMaxMessageSize
-	newline        = []byte{'\n'}
-	space          = []byte{' '}
+	writeWait      time.Duration = 10
+	pongWait       time.Duration = 60
+	pingPeriod                   = (pongWait * 9) / 10
+	maxMessageSize               = int64(512)
+	newline                      = []byte{'\n'}
+	space                        = []byte{' '}
 
 	globalUID uint32 = 0
 )

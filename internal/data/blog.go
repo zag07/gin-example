@@ -13,11 +13,11 @@ type blogRepo struct {
 	log  *zap.Logger
 }
 
-// NewArticleRepo .
-func NewArticleRepo(data *Data, logger zap.Logger) biz.ArticleRepo {
+// NewBlogRepo .
+func NewBlogRepo(data *Data, logger *zap.Logger) biz.BlogRepo {
 	return &blogRepo{
 		data: data,
-		log:  &logger,
+		log:  logger,
 	}
 }
 

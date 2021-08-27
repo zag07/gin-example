@@ -3,7 +3,6 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
-	"github.com/zs368/gin-example/configs"
 )
 
 func GetPage(ctx *gin.Context) int {
@@ -18,10 +17,10 @@ func GetPage(ctx *gin.Context) int {
 func GetPageSize(ctx *gin.Context) int {
 	pageSize := cast.ToInt(ctx.Query("limit"))
 	if pageSize <= 0 {
-		return int(configs.App.DefaultPageSize)
+		return 25
 	}
-	if pageSize > int(configs.App.MaxPageSize) {
-		return int(configs.App.MaxPageSize)
+	if pageSize > 100 {
+		return 100
 	}
 
 	return pageSize

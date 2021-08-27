@@ -2,8 +2,6 @@ package chat_svs
 
 import (
 	"log"
-
-	"github.com/zs368/gin-example/configs"
 )
 
 type broadcaster struct {
@@ -14,12 +12,13 @@ type broadcaster struct {
 	messages chan *Message
 }
 
+
 var Broadcaster = &broadcaster{
 	users:    make(map[*User]bool),
 	entering: make(chan *User),
 	leaving:  make(chan *User),
 	send:     make(chan []byte),
-	messages: make(chan *Message, configs.App.WsMessageQueue),
+	messages: make(chan *Message, 1000),
 }
 
 func (b *broadcaster) Run() {
@@ -60,7 +59,7 @@ func (b *broadcaster) Run() {
 }
 
 func (b *broadcaster) Broadcast(msg *Message) {
-	if len(b.messages) >= int(configs.App.WsMessageQueue) {
+	if len(b.messages) >= int(1000) {
 		log.Println("broadcast queue 满了")
 	}
 	b.messages <- msg
