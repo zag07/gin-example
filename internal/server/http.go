@@ -13,7 +13,7 @@ import (
 func NewHTTPServer(cfg *conf.HTTP, logger *zap.Logger, e *service.ExampleService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Addr(cfg.Port),
-		http.Handler(router.NewRouter(cfg)),
+		http.Handler(router.NewRouter(cfg, e)),
 		http.Logger(logger),
 	}
 	srv := http.NewServer(opts...)

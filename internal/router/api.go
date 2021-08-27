@@ -9,9 +9,7 @@ import (
 	"github.com/zs368/gin-example/internal/service"
 )
 
-var e service.ExampleService
-
-func SetApiRouter(r *gin.Engine) {
+func setApiRouter(r *gin.Engine, e *service.ExampleService) {
 	c := r.Group("/c")
 	{
 		c.POST("/upload/file", e.UploadFile)
@@ -37,7 +35,7 @@ func SetApiRouter(r *gin.Engine) {
 	}
 }
 
-func SetWSRouter(r *gin.Engine) {
+func setWSRouter(r *gin.Engine, e *service.ExampleService) {
 	go chat_svs.Broadcaster.Run()
 
 	c := r.Group("/chat")

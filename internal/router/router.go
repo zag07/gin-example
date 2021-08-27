@@ -6,9 +6,10 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "github.com/zs368/gin-example/docs"
 	"github.com/zs368/gin-example/internal/conf"
+	"github.com/zs368/gin-example/internal/service"
 )
 
-func NewRouter(cfg *conf.HTTP) *gin.Engine {
+func NewRouter(cfg *conf.HTTP, e *service.ExampleService) *gin.Engine {
 	r := gin.New()
 
 	if cfg.Debug == true {
@@ -22,9 +23,9 @@ func NewRouter(cfg *conf.HTTP) *gin.Engine {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	SetApiRouter(r)
+	setApiRouter(r, e)
 
-	SetWSRouter(r)
+	setWSRouter(r, e)
 
 	return r
 }
