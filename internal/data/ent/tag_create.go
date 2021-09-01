@@ -86,12 +86,6 @@ func (tc *TagCreate) SetDeletedAt(t time.Time) *TagCreate {
 	return tc
 }
 
-// SetID sets the "id" field.
-func (tc *TagCreate) SetID(i int64) *TagCreate {
-	tc.mutation.SetID(i)
-	return tc
-}
-
 // Mutation returns the TagMutation object of the builder.
 func (tc *TagCreate) Mutation() *TagMutation {
 	return tc.mutation
@@ -211,10 +205,8 @@ func (tc *TagCreate) sqlSave(ctx context.Context) (*Tag, error) {
 		}
 		return nil, err
 	}
-	if _node.ID == 0 {
-		id := _spec.ID.Value.(int64)
-		_node.ID = int64(id)
-	}
+	id := _spec.ID.Value.(int64)
+	_node.ID = int(id)
 	return _node, nil
 }
 
@@ -224,15 +216,11 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: tag.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt64,
+				Type:   field.TypeInt,
 				Column: tag.FieldID,
 			},
 		}
 	)
-	if id, ok := tc.mutation.ID(); ok {
-		_node.ID = id
-		_spec.ID.Value = id
-	}
 	if value, ok := tc.mutation.Name(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -334,9 +322,9 @@ func (tcb *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
 				}
 				mutation.id = &nodes[i].ID
 				mutation.done = true
-				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
+				if specs[i].ID.Value != nil {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int64(id)
+					nodes[i].ID = int(id)
 				}
 				return nodes[i], nil
 			})

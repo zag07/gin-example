@@ -1,11 +1,10 @@
 package log
 
 import (
-	"io"
-
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"io"
 )
 
 // InitLogger 将日志写入本地文件
@@ -30,7 +29,7 @@ func InitLogger() (*zap.Logger, error) {
 	return logger, nil
 }
 
-// CustomLogger 按级别切割文件、按大小切割文件
+// CustomLogger 按级别、大小切割文件
 func CustomLogger() (*zap.Logger, error) {
 	encoder := getEncoder()
 
@@ -63,13 +62,13 @@ func CustomLogger() (*zap.Logger, error) {
 
 func getEncoder() zapcore.Encoder {
 	return zapcore.NewConsoleEncoder(zapcore.EncoderConfig{
-		TimeKey:        "",
-		LevelKey:       "level",
-		CallerKey:      "file",
-		MessageKey:     "msg",
+		TimeKey:        "T",
+		LevelKey:       "",
+		CallerKey:      "F",
+		MessageKey:     "M",
 		LineEnding:     zapcore.DefaultLineEnding,
 		EncodeLevel:    zapcore.CapitalLevelEncoder,
-		EncodeTime:     zapcore.EpochTimeEncoder,
+		EncodeTime:     zapcore.RFC3339TimeEncoder,
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	})

@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema/field"
 	"time"
 )
@@ -16,22 +15,30 @@ type Article struct {
 func (Article) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id"),
-		field.String("title"),
-		field.String("desc"),
-		field.String("cover_image_url"),
-		field.Text("content"),
-		field.Int("status").Default(1),
-		field.String("created_by"),
-		field.String("updated_by"),
+		field.String("title").
+			Default(""),
+		field.String("desc").
+			Default(""),
+		field.String("cover_image_url").
+			Default(""),
+		field.Text("content").
+			Default(""),
+		field.Int8("status").
+			Default(1).
+			Range(1, 9).
+			Comment("1：正常使用 2：删除"),
+		field.String("created_by").
+			Default(""),
+		field.String("updated_by").
+			Default(""),
 		field.Time("created_at").
-			Default(time.Now).SchemaType(map[string]string{
-			dialect.MySQL: "datetime",
-		}),
+			Default(time.Now),
 		field.Time("updated_at").
-			Default(time.Now).SchemaType(map[string]string{
-			dialect.MySQL: "datetime",
-		}),
-		field.Time("deleted_at"),
+			Default(time.Now).
+			UpdateDefault(time.Now),
+		field.Time("deleted_at").
+			Optional().
+			Nillable(),
 	}
 }
 

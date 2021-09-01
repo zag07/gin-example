@@ -41,8 +41,8 @@ type ArticleMutation struct {
 	desc            *string
 	cover_image_url *string
 	content         *string
-	status          *int
-	addstatus       *int
+	status          *int8
+	addstatus       *int8
 	created_by      *string
 	updated_by      *string
 	created_at      *time.Time
@@ -284,13 +284,13 @@ func (m *ArticleMutation) ResetContent() {
 }
 
 // SetStatus sets the "status" field.
-func (m *ArticleMutation) SetStatus(i int) {
+func (m *ArticleMutation) SetStatus(i int8) {
 	m.status = &i
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *ArticleMutation) Status() (r int, exists bool) {
+func (m *ArticleMutation) Status() (r int8, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -301,7 +301,7 @@ func (m *ArticleMutation) Status() (r int, exists bool) {
 // OldStatus returns the old "status" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldStatus(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldStatus(ctx context.Context) (v int8, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -316,7 +316,7 @@ func (m *ArticleMutation) OldStatus(ctx context.Context) (v int, err error) {
 }
 
 // AddStatus adds i to the "status" field.
-func (m *ArticleMutation) AddStatus(i int) {
+func (m *ArticleMutation) AddStatus(i int8) {
 	if m.addstatus != nil {
 		*m.addstatus += i
 	} else {
@@ -325,7 +325,7 @@ func (m *ArticleMutation) AddStatus(i int) {
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *ArticleMutation) AddedStatus() (r int, exists bool) {
+func (m *ArticleMutation) AddedStatus() (r int8, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -500,7 +500,7 @@ func (m *ArticleMutation) DeletedAt() (r time.Time, exists bool) {
 // OldDeletedAt returns the old "deleted_at" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+func (m *ArticleMutation) OldDeletedAt(ctx context.Context) (v *time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldDeletedAt is only allowed on UpdateOne operations")
 	}
@@ -514,9 +514,22 @@ func (m *ArticleMutation) OldDeletedAt(ctx context.Context) (v time.Time, err er
 	return oldValue.DeletedAt, nil
 }
 
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ArticleMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[article.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ArticleMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[article.FieldDeletedAt]
+	return ok
+}
+
 // ResetDeletedAt resets all changes to the "deleted_at" field.
 func (m *ArticleMutation) ResetDeletedAt() {
 	m.deleted_at = nil
+	delete(m.clearedFields, article.FieldDeletedAt)
 }
 
 // Where appends a list predicates to the ArticleMutation builder.
@@ -664,7 +677,7 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 		m.SetContent(v)
 		return nil
 	case article.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -736,7 +749,7 @@ func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case article.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -749,7 +762,11 @@ func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ArticleMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(article.FieldDeletedAt) {
+		fields = append(fields, article.FieldDeletedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -762,6 +779,11 @@ func (m *ArticleMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ArticleMutation) ClearField(name string) error {
+	switch name {
+	case article.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	}
 	return fmt.Errorf("unknown Article nullable field %s", name)
 }
 
@@ -1316,7 +1338,7 @@ type TagMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int64
+	id            *int
 	name          *string
 	status        *int
 	addstatus     *int
@@ -1351,7 +1373,7 @@ func newTagMutation(c config, op Op, opts ...tagOption) *TagMutation {
 }
 
 // withTagID sets the ID field of the mutation.
-func withTagID(id int64) tagOption {
+func withTagID(id int) tagOption {
 	return func(m *TagMutation) {
 		var (
 			err   error
@@ -1401,15 +1423,9 @@ func (m TagMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Tag entities.
-func (m *TagMutation) SetID(id int64) {
-	m.id = &id
-}
-
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TagMutation) ID() (id int64, exists bool) {
+func (m *TagMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}

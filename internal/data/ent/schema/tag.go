@@ -15,7 +15,6 @@ type Tag struct {
 // Fields of the Tag.
 func (Tag) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("id"),
 		field.String("name"),
 		field.Int("status").Default(1),
 		field.String("created_by"),

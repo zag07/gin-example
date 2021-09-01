@@ -13,12 +13,27 @@ import (
 )
 
 type Article struct {
-	Id        int64
-	Title     string
-	Content   string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Like      int64
+	Id            int64
+	Title         string
+	Desc          string
+	CoverImageUrl string
+	Content       string
+	Status        int8
+	CreatedBy     string
+	UpdatedBy     string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     time.Time
+	Like          int64
+}
+
+type UpdateArticle struct {
+	Title         *string
+	Desc          *string
+	CoverImageUrl *string
+	Content       *string
+	Status        *int8
+	UpdatedBy     *string
 }
 
 type BlogRepo interface {
@@ -26,7 +41,7 @@ type BlogRepo interface {
 	ListArticle(ctx context.Context) ([]*Article, error)
 	GetArticle(ctx context.Context, id int64) (*Article, error)
 	CreateArticle(ctx context.Context, article *Article) error
-	UpdateArticle(ctx context.Context, id int64, article *Article) error
+	UpdateArticle(ctx context.Context, id int64, article *UpdateArticle) error
 	DeleteArticle(ctx context.Context, id int64) error
 
 	// redis
@@ -72,7 +87,7 @@ func (uc *BlogUseCase) CreateArticle(ctx context.Context, article *Article) erro
 	return uc.repo.CreateArticle(ctx, article)
 }
 
-func (uc *BlogUseCase) UpdateArticle(ctx context.Context, id int64, article *Article) error {
+func (uc *BlogUseCase) UpdateArticle(ctx context.Context, id int64, article *UpdateArticle) error {
 	return uc.repo.UpdateArticle(ctx, id, article)
 }
 

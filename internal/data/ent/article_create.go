@@ -26,9 +26,25 @@ func (ac *ArticleCreate) SetTitle(s string) *ArticleCreate {
 	return ac
 }
 
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (ac *ArticleCreate) SetNillableTitle(s *string) *ArticleCreate {
+	if s != nil {
+		ac.SetTitle(*s)
+	}
+	return ac
+}
+
 // SetDesc sets the "desc" field.
 func (ac *ArticleCreate) SetDesc(s string) *ArticleCreate {
 	ac.mutation.SetDesc(s)
+	return ac
+}
+
+// SetNillableDesc sets the "desc" field if the given value is not nil.
+func (ac *ArticleCreate) SetNillableDesc(s *string) *ArticleCreate {
+	if s != nil {
+		ac.SetDesc(*s)
+	}
 	return ac
 }
 
@@ -38,20 +54,36 @@ func (ac *ArticleCreate) SetCoverImageURL(s string) *ArticleCreate {
 	return ac
 }
 
+// SetNillableCoverImageURL sets the "cover_image_url" field if the given value is not nil.
+func (ac *ArticleCreate) SetNillableCoverImageURL(s *string) *ArticleCreate {
+	if s != nil {
+		ac.SetCoverImageURL(*s)
+	}
+	return ac
+}
+
 // SetContent sets the "content" field.
 func (ac *ArticleCreate) SetContent(s string) *ArticleCreate {
 	ac.mutation.SetContent(s)
 	return ac
 }
 
+// SetNillableContent sets the "content" field if the given value is not nil.
+func (ac *ArticleCreate) SetNillableContent(s *string) *ArticleCreate {
+	if s != nil {
+		ac.SetContent(*s)
+	}
+	return ac
+}
+
 // SetStatus sets the "status" field.
-func (ac *ArticleCreate) SetStatus(i int) *ArticleCreate {
+func (ac *ArticleCreate) SetStatus(i int8) *ArticleCreate {
 	ac.mutation.SetStatus(i)
 	return ac
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ac *ArticleCreate) SetNillableStatus(i *int) *ArticleCreate {
+func (ac *ArticleCreate) SetNillableStatus(i *int8) *ArticleCreate {
 	if i != nil {
 		ac.SetStatus(*i)
 	}
@@ -64,9 +96,25 @@ func (ac *ArticleCreate) SetCreatedBy(s string) *ArticleCreate {
 	return ac
 }
 
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (ac *ArticleCreate) SetNillableCreatedBy(s *string) *ArticleCreate {
+	if s != nil {
+		ac.SetCreatedBy(*s)
+	}
+	return ac
+}
+
 // SetUpdatedBy sets the "updated_by" field.
 func (ac *ArticleCreate) SetUpdatedBy(s string) *ArticleCreate {
 	ac.mutation.SetUpdatedBy(s)
+	return ac
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ac *ArticleCreate) SetNillableUpdatedBy(s *string) *ArticleCreate {
+	if s != nil {
+		ac.SetUpdatedBy(*s)
+	}
 	return ac
 }
 
@@ -101,6 +149,14 @@ func (ac *ArticleCreate) SetNillableUpdatedAt(t *time.Time) *ArticleCreate {
 // SetDeletedAt sets the "deleted_at" field.
 func (ac *ArticleCreate) SetDeletedAt(t time.Time) *ArticleCreate {
 	ac.mutation.SetDeletedAt(t)
+	return ac
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (ac *ArticleCreate) SetNillableDeletedAt(t *time.Time) *ArticleCreate {
+	if t != nil {
+		ac.SetDeletedAt(*t)
+	}
 	return ac
 }
 
@@ -181,9 +237,33 @@ func (ac *ArticleCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ac *ArticleCreate) defaults() {
+	if _, ok := ac.mutation.Title(); !ok {
+		v := article.DefaultTitle
+		ac.mutation.SetTitle(v)
+	}
+	if _, ok := ac.mutation.Desc(); !ok {
+		v := article.DefaultDesc
+		ac.mutation.SetDesc(v)
+	}
+	if _, ok := ac.mutation.CoverImageURL(); !ok {
+		v := article.DefaultCoverImageURL
+		ac.mutation.SetCoverImageURL(v)
+	}
+	if _, ok := ac.mutation.Content(); !ok {
+		v := article.DefaultContent
+		ac.mutation.SetContent(v)
+	}
 	if _, ok := ac.mutation.Status(); !ok {
 		v := article.DefaultStatus
 		ac.mutation.SetStatus(v)
+	}
+	if _, ok := ac.mutation.CreatedBy(); !ok {
+		v := article.DefaultCreatedBy
+		ac.mutation.SetCreatedBy(v)
+	}
+	if _, ok := ac.mutation.UpdatedBy(); !ok {
+		v := article.DefaultUpdatedBy
+		ac.mutation.SetUpdatedBy(v)
 	}
 	if _, ok := ac.mutation.CreatedAt(); !ok {
 		v := article.DefaultCreatedAt()
@@ -212,6 +292,11 @@ func (ac *ArticleCreate) check() error {
 	if _, ok := ac.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "status"`)}
 	}
+	if v, ok := ac.mutation.Status(); ok {
+		if err := article.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "status": %w`, err)}
+		}
+	}
 	if _, ok := ac.mutation.CreatedBy(); !ok {
 		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "created_by"`)}
 	}
@@ -224,9 +309,6 @@ func (ac *ArticleCreate) check() error {
 	if _, ok := ac.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "updated_at"`)}
 	}
-	if _, ok := ac.mutation.DeletedAt(); !ok {
-		return &ValidationError{Name: "deleted_at", err: errors.New(`ent: missing required field "deleted_at"`)}
-	}
 	return nil
 }
 
@@ -238,7 +320,7 @@ func (ac *ArticleCreate) sqlSave(ctx context.Context) (*Article, error) {
 		}
 		return nil, err
 	}
-	if _node.ID == 0 {
+	if _spec.ID.Value != _node.ID {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
@@ -294,7 +376,7 @@ func (ac *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := ac.mutation.Status(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: article.FieldStatus,
 		})
@@ -338,7 +420,7 @@ func (ac *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 			Value:  value,
 			Column: article.FieldDeletedAt,
 		})
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	return _node, _spec
 }

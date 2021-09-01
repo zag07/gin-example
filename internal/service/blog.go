@@ -59,8 +59,12 @@ func (s *ExampleService) CreateArticle(ctx *gin.Context) {
 	}
 
 	err := s.blog.CreateArticle(ctx, &biz.Article{
-		Title:   p.Title,
-		Content: p.Content,
+		Title:         p.Title,
+		Desc:          p.Desc,
+		CoverImageUrl: p.CoverImageUrl,
+		Content:       p.Content,
+		CreatedBy:     p.CreatedBy,
+		UpdatedBy:     p.UpdatedBy,
 	})
 	if err != nil {
 		r.ToErrorResponse(errcode.CreateArticle.WithDetails(err.Error()))
@@ -79,10 +83,13 @@ func (s *ExampleService) UpdateArticle(ctx *gin.Context) {
 		return
 	}
 
-	// TODO 指针为空时
-	err := s.blog.UpdateArticle(ctx, p.ID, &biz.Article{
-		Title:   *p.Title,
-		Content: *p.Content,
+	err := s.blog.UpdateArticle(ctx, p.ID, &biz.UpdateArticle{
+		Title:         p.Title,
+		Desc:          p.Desc,
+		CoverImageUrl: p.CoverImageUrl,
+		Content:       p.Content,
+		Status:        p.Status,
+		UpdatedBy:     p.UpdatedBy,
 	})
 	if err != nil {
 		r.ToErrorResponse(errcode.Err.WithDetails(err.Error()))

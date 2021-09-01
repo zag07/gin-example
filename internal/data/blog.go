@@ -2,8 +2,6 @@ package data
 
 import (
 	"context"
-	"time"
-
 	"github.com/zs368/gin-example/internal/biz"
 	"go.uber.org/zap"
 )
@@ -57,20 +55,27 @@ func (ar *blogRepo) CreateArticle(ctx context.Context, article *biz.Article) err
 	_, err := ar.data.db.Article.
 		Create().
 		SetTitle(article.Title).
-		SetContent(article.Content).
+		SetDesc(article.Desc).
+		SetCoverImageURL(article.CoverImageUrl).
+		SetNillableContent(&article.Content).
+		SetCreatedBy(article.CreatedBy).
+		SetUpdatedBy(article.UpdatedBy).
 		Save(ctx)
 	return err
 }
 
-func (ar *blogRepo) UpdateArticle(ctx context.Context, id int64, article *biz.Article) error {
+func (ar *blogRepo) UpdateArticle(ctx context.Context, id int64, article *biz.UpdateArticle) error {
 	p, err := ar.data.db.Article.Get(ctx, id)
 	if err != nil {
 		return err
 	}
 	_, err = p.Update().
-		SetTitle(article.Title).
-		SetContent(article.Content).
-		SetUpdatedAt(time.Now()).
+		SetNillableTitle(article.Title).
+		SetNillableDesc(article.Desc).
+		SetNillableCoverImageURL(article.CoverImageUrl).
+		SetNillableContent(article.Content).
+		SetNillableStatus(article.Status).
+		SetNillableUpdatedBy(article.UpdatedBy).
 		Save(ctx)
 	return err
 }

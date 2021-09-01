@@ -11,16 +11,16 @@ var (
 	// ArticlesColumns holds the columns for the "articles" table.
 	ArticlesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "title", Type: field.TypeString},
-		{Name: "desc", Type: field.TypeString},
-		{Name: "cover_image_url", Type: field.TypeString},
-		{Name: "content", Type: field.TypeString, Size: 2147483647},
-		{Name: "status", Type: field.TypeInt, Default: 1},
-		{Name: "created_by", Type: field.TypeString},
-		{Name: "updated_by", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "datetime"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "datetime"}},
-		{Name: "deleted_at", Type: field.TypeTime},
+		{Name: "title", Type: field.TypeString, Default: ""},
+		{Name: "desc", Type: field.TypeString, Default: ""},
+		{Name: "cover_image_url", Type: field.TypeString, Default: ""},
+		{Name: "content", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "status", Type: field.TypeInt8, Default: 1},
+		{Name: "created_by", Type: field.TypeString, Default: ""},
+		{Name: "updated_by", Type: field.TypeString, Default: ""},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 	}
 	// ArticlesTable holds the schema information for the "articles" table.
 	ArticlesTable = &schema.Table{
@@ -44,7 +44,7 @@ var (
 	}
 	// TagsColumns holds the columns for the "tags" table.
 	TagsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeInt, Default: 1},
 		{Name: "created_by", Type: field.TypeString},

@@ -24,3 +24,11 @@ config:
 .PHONY: wire
 wire:
 	wire ./cmd/example/...
+
+.PHONY: ent
+ent:
+	go generate ./internal/data/ent
+
+.PHONY: run
+run:
+	go run ./cmd/example/main.go ./cmd/example/wire_gen.go

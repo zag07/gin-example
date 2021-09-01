@@ -1,4 +1,4 @@
-app:
+http:
     name: gin-example
     port: :8080
     timeout:

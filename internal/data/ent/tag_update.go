@@ -165,7 +165,7 @@ func (tu *TagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Table:   tag.Table,
 			Columns: tag.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt64,
+				Type:   field.TypeInt,
 				Column: tag.FieldID,
 			},
 		},
@@ -397,7 +397,7 @@ func (tuo *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			Table:   tag.Table,
 			Columns: tag.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt64,
+				Type:   field.TypeInt,
 				Column: tag.FieldID,
 			},
 		},

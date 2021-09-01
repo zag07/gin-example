@@ -25,7 +25,8 @@ type Article struct {
 	// Content holds the value of the "content" field.
 	Content string `json:"content,omitempty"`
 	// Status holds the value of the "status" field.
-	Status int `json:"status,omitempty"`
+	// 1：正常使用 2：删除
+	Status int8 `json:"status,omitempty"`
 	// CreatedBy holds the value of the "created_by" field.
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
@@ -35,7 +36,7 @@ type Article struct {
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -98,7 +99,7 @@ func (a *Article) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				a.Status = int(value.Int64)
+				a.Status = int8(value.Int64)
 			}
 		case article.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -128,7 +129,8 @@ func (a *Article) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				a.DeletedAt = value.Time
+				a.DeletedAt = new(time.Time)
+				*a.DeletedAt = value.Time
 			}
 		}
 	}
@@ -176,8 +178,10 @@ func (a *Article) String() string {
 	builder.WriteString(a.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", updated_at=")
 	builder.WriteString(a.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", deleted_at=")
-	builder.WriteString(a.DeletedAt.Format(time.ANSIC))
+	if v := a.DeletedAt; v != nil {
+		builder.WriteString(", deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

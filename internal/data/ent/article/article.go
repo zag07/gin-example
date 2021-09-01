@@ -61,10 +61,26 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultTitle holds the default value on creation for the "title" field.
+	DefaultTitle string
+	// DefaultDesc holds the default value on creation for the "desc" field.
+	DefaultDesc string
+	// DefaultCoverImageURL holds the default value on creation for the "cover_image_url" field.
+	DefaultCoverImageURL string
+	// DefaultContent holds the default value on creation for the "content" field.
+	DefaultContent string
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int
+	DefaultStatus int8
+	// StatusValidator is a validator for the "status" field. It is called by the builders before save.
+	StatusValidator func(int8) error
+	// DefaultCreatedBy holds the default value on creation for the "created_by" field.
+	DefaultCreatedBy string
+	// DefaultUpdatedBy holds the default value on creation for the "updated_by" field.
+	DefaultUpdatedBy string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
 )

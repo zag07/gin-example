@@ -33,9 +33,25 @@ func (au *ArticleUpdate) SetTitle(s string) *ArticleUpdate {
 	return au
 }
 
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (au *ArticleUpdate) SetNillableTitle(s *string) *ArticleUpdate {
+	if s != nil {
+		au.SetTitle(*s)
+	}
+	return au
+}
+
 // SetDesc sets the "desc" field.
 func (au *ArticleUpdate) SetDesc(s string) *ArticleUpdate {
 	au.mutation.SetDesc(s)
+	return au
+}
+
+// SetNillableDesc sets the "desc" field if the given value is not nil.
+func (au *ArticleUpdate) SetNillableDesc(s *string) *ArticleUpdate {
+	if s != nil {
+		au.SetDesc(*s)
+	}
 	return au
 }
 
@@ -45,21 +61,37 @@ func (au *ArticleUpdate) SetCoverImageURL(s string) *ArticleUpdate {
 	return au
 }
 
+// SetNillableCoverImageURL sets the "cover_image_url" field if the given value is not nil.
+func (au *ArticleUpdate) SetNillableCoverImageURL(s *string) *ArticleUpdate {
+	if s != nil {
+		au.SetCoverImageURL(*s)
+	}
+	return au
+}
+
 // SetContent sets the "content" field.
 func (au *ArticleUpdate) SetContent(s string) *ArticleUpdate {
 	au.mutation.SetContent(s)
 	return au
 }
 
+// SetNillableContent sets the "content" field if the given value is not nil.
+func (au *ArticleUpdate) SetNillableContent(s *string) *ArticleUpdate {
+	if s != nil {
+		au.SetContent(*s)
+	}
+	return au
+}
+
 // SetStatus sets the "status" field.
-func (au *ArticleUpdate) SetStatus(i int) *ArticleUpdate {
+func (au *ArticleUpdate) SetStatus(i int8) *ArticleUpdate {
 	au.mutation.ResetStatus()
 	au.mutation.SetStatus(i)
 	return au
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (au *ArticleUpdate) SetNillableStatus(i *int) *ArticleUpdate {
+func (au *ArticleUpdate) SetNillableStatus(i *int8) *ArticleUpdate {
 	if i != nil {
 		au.SetStatus(*i)
 	}
@@ -67,7 +99,7 @@ func (au *ArticleUpdate) SetNillableStatus(i *int) *ArticleUpdate {
 }
 
 // AddStatus adds i to the "status" field.
-func (au *ArticleUpdate) AddStatus(i int) *ArticleUpdate {
+func (au *ArticleUpdate) AddStatus(i int8) *ArticleUpdate {
 	au.mutation.AddStatus(i)
 	return au
 }
@@ -78,9 +110,25 @@ func (au *ArticleUpdate) SetCreatedBy(s string) *ArticleUpdate {
 	return au
 }
 
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (au *ArticleUpdate) SetNillableCreatedBy(s *string) *ArticleUpdate {
+	if s != nil {
+		au.SetCreatedBy(*s)
+	}
+	return au
+}
+
 // SetUpdatedBy sets the "updated_by" field.
 func (au *ArticleUpdate) SetUpdatedBy(s string) *ArticleUpdate {
 	au.mutation.SetUpdatedBy(s)
+	return au
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (au *ArticleUpdate) SetNillableUpdatedBy(s *string) *ArticleUpdate {
+	if s != nil {
+		au.SetUpdatedBy(*s)
+	}
 	return au
 }
 
@@ -104,17 +152,23 @@ func (au *ArticleUpdate) SetUpdatedAt(t time.Time) *ArticleUpdate {
 	return au
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (au *ArticleUpdate) SetNillableUpdatedAt(t *time.Time) *ArticleUpdate {
+// SetDeletedAt sets the "deleted_at" field.
+func (au *ArticleUpdate) SetDeletedAt(t time.Time) *ArticleUpdate {
+	au.mutation.SetDeletedAt(t)
+	return au
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (au *ArticleUpdate) SetNillableDeletedAt(t *time.Time) *ArticleUpdate {
 	if t != nil {
-		au.SetUpdatedAt(*t)
+		au.SetDeletedAt(*t)
 	}
 	return au
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (au *ArticleUpdate) SetDeletedAt(t time.Time) *ArticleUpdate {
-	au.mutation.SetDeletedAt(t)
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (au *ArticleUpdate) ClearDeletedAt() *ArticleUpdate {
+	au.mutation.ClearDeletedAt()
 	return au
 }
 
@@ -129,13 +183,20 @@ func (au *ArticleUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	au.defaults()
 	if len(au.hooks) == 0 {
+		if err = au.check(); err != nil {
+			return 0, err
+		}
 		affected, err = au.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*ArticleMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = au.check(); err != nil {
+				return 0, err
 			}
 			au.mutation = mutation
 			affected, err = au.sqlSave(ctx)
@@ -175,6 +236,24 @@ func (au *ArticleUpdate) ExecX(ctx context.Context) {
 	if err := au.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (au *ArticleUpdate) defaults() {
+	if _, ok := au.mutation.UpdatedAt(); !ok {
+		v := article.UpdateDefaultUpdatedAt()
+		au.mutation.SetUpdatedAt(v)
+	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (au *ArticleUpdate) check() error {
+	if v, ok := au.mutation.Status(); ok {
+		if err := article.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf("ent: validator failed for field \"status\": %w", err)}
+		}
+	}
+	return nil
 }
 
 func (au *ArticleUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -225,14 +304,14 @@ func (au *ArticleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := au.mutation.Status(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: article.FieldStatus,
 		})
 	}
 	if value, ok := au.mutation.AddedStatus(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: article.FieldStatus,
 		})
@@ -272,6 +351,12 @@ func (au *ArticleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: article.FieldDeletedAt,
 		})
 	}
+	if au.mutation.DeletedAtCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: article.FieldDeletedAt,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{article.Label}
@@ -297,9 +382,25 @@ func (auo *ArticleUpdateOne) SetTitle(s string) *ArticleUpdateOne {
 	return auo
 }
 
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (auo *ArticleUpdateOne) SetNillableTitle(s *string) *ArticleUpdateOne {
+	if s != nil {
+		auo.SetTitle(*s)
+	}
+	return auo
+}
+
 // SetDesc sets the "desc" field.
 func (auo *ArticleUpdateOne) SetDesc(s string) *ArticleUpdateOne {
 	auo.mutation.SetDesc(s)
+	return auo
+}
+
+// SetNillableDesc sets the "desc" field if the given value is not nil.
+func (auo *ArticleUpdateOne) SetNillableDesc(s *string) *ArticleUpdateOne {
+	if s != nil {
+		auo.SetDesc(*s)
+	}
 	return auo
 }
 
@@ -309,21 +410,37 @@ func (auo *ArticleUpdateOne) SetCoverImageURL(s string) *ArticleUpdateOne {
 	return auo
 }
 
+// SetNillableCoverImageURL sets the "cover_image_url" field if the given value is not nil.
+func (auo *ArticleUpdateOne) SetNillableCoverImageURL(s *string) *ArticleUpdateOne {
+	if s != nil {
+		auo.SetCoverImageURL(*s)
+	}
+	return auo
+}
+
 // SetContent sets the "content" field.
 func (auo *ArticleUpdateOne) SetContent(s string) *ArticleUpdateOne {
 	auo.mutation.SetContent(s)
 	return auo
 }
 
+// SetNillableContent sets the "content" field if the given value is not nil.
+func (auo *ArticleUpdateOne) SetNillableContent(s *string) *ArticleUpdateOne {
+	if s != nil {
+		auo.SetContent(*s)
+	}
+	return auo
+}
+
 // SetStatus sets the "status" field.
-func (auo *ArticleUpdateOne) SetStatus(i int) *ArticleUpdateOne {
+func (auo *ArticleUpdateOne) SetStatus(i int8) *ArticleUpdateOne {
 	auo.mutation.ResetStatus()
 	auo.mutation.SetStatus(i)
 	return auo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (auo *ArticleUpdateOne) SetNillableStatus(i *int) *ArticleUpdateOne {
+func (auo *ArticleUpdateOne) SetNillableStatus(i *int8) *ArticleUpdateOne {
 	if i != nil {
 		auo.SetStatus(*i)
 	}
@@ -331,7 +448,7 @@ func (auo *ArticleUpdateOne) SetNillableStatus(i *int) *ArticleUpdateOne {
 }
 
 // AddStatus adds i to the "status" field.
-func (auo *ArticleUpdateOne) AddStatus(i int) *ArticleUpdateOne {
+func (auo *ArticleUpdateOne) AddStatus(i int8) *ArticleUpdateOne {
 	auo.mutation.AddStatus(i)
 	return auo
 }
@@ -342,9 +459,25 @@ func (auo *ArticleUpdateOne) SetCreatedBy(s string) *ArticleUpdateOne {
 	return auo
 }
 
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (auo *ArticleUpdateOne) SetNillableCreatedBy(s *string) *ArticleUpdateOne {
+	if s != nil {
+		auo.SetCreatedBy(*s)
+	}
+	return auo
+}
+
 // SetUpdatedBy sets the "updated_by" field.
 func (auo *ArticleUpdateOne) SetUpdatedBy(s string) *ArticleUpdateOne {
 	auo.mutation.SetUpdatedBy(s)
+	return auo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (auo *ArticleUpdateOne) SetNillableUpdatedBy(s *string) *ArticleUpdateOne {
+	if s != nil {
+		auo.SetUpdatedBy(*s)
+	}
 	return auo
 }
 
@@ -368,17 +501,23 @@ func (auo *ArticleUpdateOne) SetUpdatedAt(t time.Time) *ArticleUpdateOne {
 	return auo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (auo *ArticleUpdateOne) SetNillableUpdatedAt(t *time.Time) *ArticleUpdateOne {
+// SetDeletedAt sets the "deleted_at" field.
+func (auo *ArticleUpdateOne) SetDeletedAt(t time.Time) *ArticleUpdateOne {
+	auo.mutation.SetDeletedAt(t)
+	return auo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (auo *ArticleUpdateOne) SetNillableDeletedAt(t *time.Time) *ArticleUpdateOne {
 	if t != nil {
-		auo.SetUpdatedAt(*t)
+		auo.SetDeletedAt(*t)
 	}
 	return auo
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (auo *ArticleUpdateOne) SetDeletedAt(t time.Time) *ArticleUpdateOne {
-	auo.mutation.SetDeletedAt(t)
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (auo *ArticleUpdateOne) ClearDeletedAt() *ArticleUpdateOne {
+	auo.mutation.ClearDeletedAt()
 	return auo
 }
 
@@ -400,13 +539,20 @@ func (auo *ArticleUpdateOne) Save(ctx context.Context) (*Article, error) {
 		err  error
 		node *Article
 	)
+	auo.defaults()
 	if len(auo.hooks) == 0 {
+		if err = auo.check(); err != nil {
+			return nil, err
+		}
 		node, err = auo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*ArticleMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = auo.check(); err != nil {
+				return nil, err
 			}
 			auo.mutation = mutation
 			node, err = auo.sqlSave(ctx)
@@ -446,6 +592,24 @@ func (auo *ArticleUpdateOne) ExecX(ctx context.Context) {
 	if err := auo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (auo *ArticleUpdateOne) defaults() {
+	if _, ok := auo.mutation.UpdatedAt(); !ok {
+		v := article.UpdateDefaultUpdatedAt()
+		auo.mutation.SetUpdatedAt(v)
+	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (auo *ArticleUpdateOne) check() error {
+	if v, ok := auo.mutation.Status(); ok {
+		if err := article.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf("ent: validator failed for field \"status\": %w", err)}
+		}
+	}
+	return nil
 }
 
 func (auo *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err error) {
@@ -513,14 +677,14 @@ func (auo *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err e
 	}
 	if value, ok := auo.mutation.Status(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: article.FieldStatus,
 		})
 	}
 	if value, ok := auo.mutation.AddedStatus(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeInt8,
 			Value:  value,
 			Column: article.FieldStatus,
 		})
@@ -557,6 +721,12 @@ func (auo *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err e
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
+			Column: article.FieldDeletedAt,
+		})
+	}
+	if auo.mutation.DeletedAtCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
 			Column: article.FieldDeletedAt,
 		})
 	}

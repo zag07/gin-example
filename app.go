@@ -19,9 +19,13 @@ type App struct {
 
 func New(opts ...Option) *App {
 	options := options{
-		ctx:    context.Background(),
+		ctx:  context.Background(),
+		sigs: []os.Signal{syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT},
+
 		logger: zap.NewExample(),
-		sigs:   []os.Signal{syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT},
+	}
+	for _, o := range opts {
+		o(&options)
 	}
 
 	ctx, cancel := context.WithCancel(options.ctx)
