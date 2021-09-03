@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	entgo.io/ent v0.9.1
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/fsnotify/fsnotify v1.5.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
@@ -36,7 +35,7 @@ require (
 	golang.org/x/mod v0.5.0 // indirect
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
+	golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
@@ -70,6 +69,8 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect
+	go.opentelemetry.io/otel/exporters/jaeger v1.0.0-RC2 // indirect
+	go.opentelemetry.io/otel/sdk v1.0.0-RC2 // indirect
 	golang.org/x/tools v0.1.5 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

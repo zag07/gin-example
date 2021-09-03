@@ -6,6 +6,7 @@ import (
 	"github.com/zs368/gin-example/internal/conf"
 	"github.com/zs368/gin-example/internal/router"
 	"github.com/zs368/gin-example/internal/service"
+	"github.com/zs368/gin-example/pkg/middleware/tracing"
 	"github.com/zs368/gin-example/pkg/transport/http"
 )
 
@@ -15,6 +16,9 @@ func NewHTTPServer(cfg *conf.HTTP, logger *zap.Logger, e *service.ExampleService
 		http.Addr(cfg.Port),
 		http.Handler(router.NewRouter(cfg, e)),
 		http.Logger(logger),
+		http.Middleware(
+			tracing.Server(),
+		),
 	}
 	srv := http.NewServer(opts...)
 	return srv

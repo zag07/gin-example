@@ -11,6 +11,12 @@ import (
 	"syscall"
 )
 
+type AppInfo interface {
+	ID() string
+	Name() string
+}
+
+
 type App struct {
 	ctx    context.Context
 	opts   options
@@ -35,6 +41,12 @@ func New(opts ...Option) *App {
 		cancel: cancel,
 	}
 }
+
+// ID returns app instance id.
+func (a *App) ID() string { return a.opts.id }
+
+// Name returns service name.
+func (a *App) Name() string { return a.opts.name }
 
 // Run executes all OnStart hooks registered with the application's Lifecycle.
 func (a *App) Run() error {
@@ -81,4 +93,17 @@ func (a *App) Stop() error {
 		a.cancel()
 	}
 	return nil
+}
+
+type appKey struct{}
+
+// NewContext returns a new Context that carries value.
+func NewContext(ctx context.Context, s AppInfo) context.Context {
+	return context.WithValue(ctx, appKey{}, s)
+}
+
+// FromContext returns the Transport value stored in ctx, if any.
+func FromContext(ctx context.Context) (s AppInfo, ok bool) {
+	s, ok = ctx.Value(appKey{}).(AppInfo)
+	return
 }

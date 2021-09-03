@@ -14,11 +14,24 @@ type Option func(o *options)
 
 // options is an application options.
 type options struct {
+	id   string
+	name string
+
 	ctx  context.Context
 	sigs []os.Signal
 
 	logger  *zap.Logger
 	servers []transport.Server
+}
+
+// ID with service id.
+func ID(id string) Option {
+	return func(o *options) { o.id = id }
+}
+
+// Name with service name.
+func Name(name string) Option {
+	return func(o *options) { o.name = name }
 }
 
 // Context with service context.

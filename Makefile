@@ -21,6 +21,10 @@ config:
 		   --go_out=paths=source_relative:. \
 		   $(CONFIGS_PROTO_FILES)
 
+.PHONY: swag
+swag:
+	swag init -g cmd/example/main.go
+
 .PHONY: wire
 wire:
 	wire ./cmd/example/...

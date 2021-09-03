@@ -61,6 +61,9 @@ func LoadFromContent(content string) (*conf.Bootstrap, error) {
 // DefaultConfig returns a default config instance
 func DefaultConfig() *conf.Bootstrap {
 	return &conf.Bootstrap{
+		Trace: &conf.Trace{
+			Endpoint: "http://127.0.0.1:14268/api/traces",
+		},
 		Http: &conf.HTTP{
 			Name:                 "gin-example",
 			Port:                 ":8080",

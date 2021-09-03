@@ -8,11 +8,14 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+
+	"github.com/zs368/gin-example/pkg/middleware"
 )
 
 // Server is an HTTP server wrapper.
 type Server struct {
 	*http.Server
+	ms      []middleware.Middleware
 	timeout time.Duration
 	log     *zap.Logger
 }
@@ -38,6 +41,13 @@ func Handler(handler http.Handler) ServerOption {
 func Timeout(timeout time.Duration) ServerOption {
 	return func(s *Server) {
 		s.timeout = timeout
+	}
+}
+
+// Middleware with service middleware option.
+func Middleware(m ...middleware.Middleware) ServerOption {
+	return func(s *Server) {
+		s.ms = m
 	}
 }
 

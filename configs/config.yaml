@@ -1,3 +1,5 @@
+trace:
+    endpoint: http://127.0.0.1:14268/api/traces
 http:
     name: gin-example
     port: :8080
@@ -12,8 +14,6 @@ http:
         - .jpg
         - .jpeg
         - .png
-    traceName: gin-example
-    tracePort: 127.0.0.1:6831
     wsWriteWait:
         seconds: 10
     wsPongWait:
@@ -30,10 +30,12 @@ data:
         driver: mysql
         source: root:root@tcp(127.0.0.1:33061)/gin_example2?charset=utf8mb4&parseTime=True&loc=Local
     redis:
-        addr: 127.0.0.1:6379
+        addr: 127.0.0.1:63791
+        password: echo-oxo
         dial_timeout:
             seconds: 1
         read_timeout:
             seconds: 0.4
         write_timeout:
             seconds: 0.6
+

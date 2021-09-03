@@ -6,8 +6,13 @@ option go_package = "gin_example/internal/conf;conf";
 import "google/protobuf/duration.proto";
 
 message Bootstrap {
-  HTTP http = 1;
-  Data data = 2;
+  Trace trace = 1;
+  HTTP  http = 2;
+  Data  data = 3;
+}
+
+message Trace {
+  string endpoint = 1;
 }
 
 message HTTP {
