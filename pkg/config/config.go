@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	"github.com/zs368/gin-example/internal/conf"
+	"github.com/zag07/gin-example/internal/conf"
 )
 
 func load(content string, isPath bool) (*conf.Bootstrap, error) {

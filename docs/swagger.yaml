@@ -1,6 +1,6 @@
 info:
   contact: {}
   title: gin-example
-  version: 0.2.x
+  version: 0.3.x
 paths: {}
 swagger: "2.0"

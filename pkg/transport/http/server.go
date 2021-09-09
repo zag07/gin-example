@@ -9,7 +9,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/zs368/gin-example/pkg/middleware"
+	"github.com/zag07/gin-example/pkg/middleware"
 )
 
 // Server is an HTTP server wrapper.

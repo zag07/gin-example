@@ -1,17 +1,17 @@
 //go:build wireinject
 
-package main
+package serve
 
 import (
 	"github.com/google/wire"
 	"go.uber.org/zap"
 
-	"github.com/zs368/gin-example"
-	"github.com/zs368/gin-example/internal/biz"
-	"github.com/zs368/gin-example/internal/conf"
-	"github.com/zs368/gin-example/internal/data"
-	"github.com/zs368/gin-example/internal/server"
-	"github.com/zs368/gin-example/internal/service"
+	example "github.com/zag07/gin-example"
+	"github.com/zag07/gin-example/internal/biz"
+	"github.com/zag07/gin-example/internal/conf"
+	"github.com/zag07/gin-example/internal/data"
+	"github.com/zag07/gin-example/internal/server"
+	"github.com/zag07/gin-example/internal/service"
 )
 
 // initApp init example application.

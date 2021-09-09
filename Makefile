@@ -23,7 +23,7 @@ config:
 
 .PHONY: swag
 swag:
-	swag init -g cmd/example/main.go
+	swag init -g cmd/main.go
 
 .PHONY: wire
 wire:

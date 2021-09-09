@@ -4,7 +4,7 @@ import (
 	"github.com/google/wire"
 	"go.uber.org/zap"
 
-	"github.com/zs368/gin-example/internal/biz"
+	"github.com/zag07/gin-example/internal/biz"
 )
 
 // ProviderSet is service providers.

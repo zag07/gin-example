@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 
-	"github.com/zs368/gin-example/internal/biz"
-	"github.com/zs368/gin-example/internal/pkg/app"
-	"github.com/zs368/gin-example/internal/pkg/errcode"
-	"github.com/zs368/gin-example/internal/router/rule"
+	"github.com/zag07/gin-example/internal/biz"
+	"github.com/zag07/gin-example/internal/pkg/app"
+	"github.com/zag07/gin-example/internal/pkg/errcode"
+	"github.com/zag07/gin-example/internal/router/rule"
 )
 
 // 这儿的定义方式，要不要先预先定义，通过api层进行参数校验

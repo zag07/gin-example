@@ -1,14 +1,14 @@
 package service
 
 import (
-	"github.com/zs368/gin-example/internal/pkg/chatroom"
+	"github.com/zag07/gin-example/internal/pkg/chatroom"
 	"html/template"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/zs368/gin-example/internal/pkg/app"
-	"github.com/zs368/gin-example/internal/pkg/errcode"
+	"github.com/zag07/gin-example/internal/pkg/app"
+	"github.com/zag07/gin-example/internal/pkg/errcode"
 )
 
 var broadcast = chat_svs.Broadcaster
