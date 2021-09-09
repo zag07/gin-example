@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/zs368/gin-example/internal/data/ent"
+	"github.com/zag07/gin-example/internal/data/ent"
 )
 
 // The ArticleFunc type is an adapter to allow the use of ordinary

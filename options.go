@@ -6,7 +6,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/zs368/gin-example/pkg/transport"
+	"github.com/zag07/gin-example/pkg/transport"
 )
 
 // Option is an application option.

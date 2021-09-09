@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/zs368/gin-example/internal/pkg/app"
+	"github.com/zag07/gin-example/internal/pkg/app"
 )
 
 var (

@@ -4,7 +4,7 @@ package user
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"github.com/zs368/gin-example/internal/data/ent/predicate"
+	"github.com/zag07/gin-example/internal/data/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

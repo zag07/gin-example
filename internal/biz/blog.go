@@ -3,8 +3,8 @@ package biz
 import (
 	"context"
 	"errors"
-	"github.com/zs368/gin-example/internal/conf"
-	"github.com/zs368/gin-example/internal/pkg/upload"
+	"github.com/zag07/gin-example/internal/conf"
+	"github.com/zag07/gin-example/internal/pkg/upload"
 	"mime/multipart"
 	"os"
 	"time"

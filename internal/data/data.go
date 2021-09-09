@@ -16,9 +16,9 @@ import (
 	// init mysql driver
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/zs368/gin-example/internal/conf"
-	"github.com/zs368/gin-example/internal/data/ent"
-	"github.com/zs368/gin-example/internal/data/ent/migrate"
+	"github.com/zag07/gin-example/internal/conf"
+	"github.com/zag07/gin-example/internal/data/ent"
+	"github.com/zag07/gin-example/internal/data/ent/migrate"
 )
 
 // ProviderSet is data providers.

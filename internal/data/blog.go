@@ -2,7 +2,7 @@ package data
 
 import (
 	"context"
-	"github.com/zs368/gin-example/internal/biz"
+	"github.com/zag07/gin-example/internal/biz"
 	"go.uber.org/zap"
 )
 

@@ -6,12 +6,13 @@
 package main
 
 import (
-	"github.com/zs368/gin-example"
-	"github.com/zs368/gin-example/internal/biz"
-	"github.com/zs368/gin-example/internal/conf"
-	"github.com/zs368/gin-example/internal/data"
-	"github.com/zs368/gin-example/internal/server"
-	"github.com/zs368/gin-example/internal/service"
+	"github.com/zag07/gin-example"
+	"github.com/zag07/gin-example/internal/biz"
+	"github.com/zag07/gin-example/internal/conf"
+	"github.com/zag07/gin-example/internal/data"
+	"github.com/zag07/gin-example/internal/server"
+	"github.com/zag07/gin-example/internal/service"
+	example "github.com/zs368/gin-example"
 	"go.uber.org/zap"
 )
 

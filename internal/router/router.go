@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-	_ "github.com/zs368/gin-example/docs"
-	"github.com/zs368/gin-example/internal/conf"
-	"github.com/zs368/gin-example/internal/service"
+	_ "github.com/zag07/gin-example/docs"
+	"github.com/zag07/gin-example/internal/conf"
+	"github.com/zag07/gin-example/internal/service"
 )
 
 func NewRouter(cfg *conf.HTTP, e *service.ExampleService) *gin.Engine {

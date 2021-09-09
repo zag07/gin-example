@@ -9,8 +9,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/zs368/gin-example/internal/conf"
-	"github.com/zs368/gin-example/internal/pkg/utils"
+	"github.com/zag07/gin-example/internal/conf"
+	"github.com/zag07/gin-example/internal/pkg/utils"
 )
 
 type File struct {

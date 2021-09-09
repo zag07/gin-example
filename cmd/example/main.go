@@ -11,10 +11,10 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 	"go.uber.org/zap"
 
-	example "github.com/zs368/gin-example"
-	"github.com/zs368/gin-example/pkg/config"
-	"github.com/zs368/gin-example/pkg/log"
-	"github.com/zs368/gin-example/pkg/transport/http"
+	example "github.com/zag07/gin-example"
+	"github.com/zag07/gin-example/pkg/config"
+	"github.com/zag07/gin-example/pkg/log"
+	"github.com/zag07/gin-example/pkg/transport/http"
 )
 
 var (

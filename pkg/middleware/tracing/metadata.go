@@ -2,8 +2,8 @@ package tracing
 
 import (
 	"context"
-	example "github.com/zs368/gin-example"
-	"github.com/zs368/gin-example/pkg/metadata"
+	example "github.com/zag07/gin-example"
+	"github.com/zag07/gin-example/pkg/metadata"
 	"go.opentelemetry.io/otel/propagation"
 )
 

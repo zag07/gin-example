@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/zs368/gin-example/internal/pkg/chatroom"
-	"github.com/zs368/gin-example/internal/service"
+	"github.com/zag07/gin-example/internal/pkg/chatroom"
+	"github.com/zag07/gin-example/internal/service"
 )
 
 func setApiRouter(r *gin.Engine, e *service.ExampleService) {

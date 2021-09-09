@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/zs368/gin-example/internal/data/ent/comment"
+	"github.com/zag07/gin-example/internal/data/ent/comment"
 )
 
 // Comment is the model entity for the Comment schema.

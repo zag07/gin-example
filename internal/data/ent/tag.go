@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/zs368/gin-example/internal/data/ent/tag"
+	"github.com/zag07/gin-example/internal/data/ent/tag"
 )
 
 // Tag is the model entity for the Tag schema.

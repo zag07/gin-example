@@ -1,4 +1,4 @@
-module github.com/zs368/gin-example
+module github.com/zag07/gin-example
 
 go 1.17
 

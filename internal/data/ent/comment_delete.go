@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/zs368/gin-example/internal/data/ent/comment"
-	"github.com/zs368/gin-example/internal/data/ent/predicate"
+	"github.com/zag07/gin-example/internal/data/ent/comment"
+	"github.com/zag07/gin-example/internal/data/ent/predicate"
 )
 
 // CommentDelete is the builder for deleting a Comment entity.

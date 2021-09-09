@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/zs368/gin-example/internal/data/ent/user"
+	"github.com/zag07/gin-example/internal/data/ent/user"
 )
 
 // User is the model entity for the User schema.

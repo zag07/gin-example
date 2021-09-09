@@ -8,10 +8,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/zs368/gin-example/internal/data/ent/article"
-	"github.com/zs368/gin-example/internal/data/ent/comment"
-	"github.com/zs368/gin-example/internal/data/ent/tag"
-	"github.com/zs368/gin-example/internal/data/ent/user"
+	"github.com/zag07/gin-example/internal/data/ent/article"
+	"github.com/zag07/gin-example/internal/data/ent/comment"
+	"github.com/zag07/gin-example/internal/data/ent/tag"
+	"github.com/zag07/gin-example/internal/data/ent/user"
 )
 
 // ent aliases to avoid import conflicts in user's code.

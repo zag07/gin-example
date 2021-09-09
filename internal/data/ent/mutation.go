@@ -8,10 +8,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zs368/gin-example/internal/data/ent/article"
-	"github.com/zs368/gin-example/internal/data/ent/comment"
-	"github.com/zs368/gin-example/internal/data/ent/predicate"
-	"github.com/zs368/gin-example/internal/data/ent/tag"
+	"github.com/zag07/gin-example/internal/data/ent/article"
+	"github.com/zag07/gin-example/internal/data/ent/comment"
+	"github.com/zag07/gin-example/internal/data/ent/predicate"
+	"github.com/zag07/gin-example/internal/data/ent/tag"
 
 	"entgo.io/ent"
 )

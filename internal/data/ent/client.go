@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/zs368/gin-example/internal/data/ent/migrate"
+	"github.com/zag07/gin-example/internal/data/ent/migrate"
 
-	"github.com/zs368/gin-example/internal/data/ent/article"
-	"github.com/zs368/gin-example/internal/data/ent/comment"
-	"github.com/zs368/gin-example/internal/data/ent/tag"
-	"github.com/zs368/gin-example/internal/data/ent/user"
+	"github.com/zag07/gin-example/internal/data/ent/article"
+	"github.com/zag07/gin-example/internal/data/ent/comment"
+	"github.com/zag07/gin-example/internal/data/ent/tag"
+	"github.com/zag07/gin-example/internal/data/ent/user"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"

@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/zs368/gin-example/internal/data/ent/comment"
+	"github.com/zag07/gin-example/internal/data/ent/comment"
 )
 
 // CommentCreate is the builder for creating a Comment entity.

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/zs368/gin-example/internal/data/ent/article"
+	"github.com/zag07/gin-example/internal/data/ent/article"
 )
 
 // Article is the model entity for the Article schema.
